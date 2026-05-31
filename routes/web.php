@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminBookingController;
-use App\Http\Controllers\AdminPlaceholderController;
+use App\Http\Controllers\AdminBookingHistoryController;
 use App\Http\Controllers\AdminServiceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -26,7 +26,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('/services', AdminServiceController::class);
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/search', [AdminBookingController::class, 'search'])->name('bookings.search');
-    Route::get('/bookings/history', [AdminPlaceholderController::class, 'history'])->name('bookings.history');
+    Route::get('/bookings/history', [AdminBookingHistoryController::class, 'index'])->name('bookings.history');
+    Route::get('/bookings/history/search', [AdminBookingHistoryController::class, 'search'])->name('bookings.history.search');
+    Route::get('/bookings/history/{booking}', [AdminBookingHistoryController::class, 'show'])->name('bookings.history.show');
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
 });
 

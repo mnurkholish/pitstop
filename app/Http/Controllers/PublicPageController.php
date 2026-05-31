@@ -2,36 +2,70 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Service;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PublicPageController extends Controller
 {
-    public function services(): View
+    public function services(Request $request): View
     {
-        return $this->placeholder(
-            'Layanan',
-            'Katalog layanan lengkap PitStop akan tersedia pada tahap berikutnya.',
-        );
+        return view('public.services.index', [
+            'services' => $this->filteredServices($request)->get(),
+        ]);
+    }
+
+    public function searchServices(Request $request): JsonResponse
+    {
+        $services = $this->filteredServices($request)->get();
+
+        return response()->json([
+            'count' => $services->count(),
+            'cards' => view('public.services.partials.cards', compact('services'))->render(),
+            'empty' => view('public.services.partials.empty')->render(),
+        ]);
+    }
+
+    public function showService(Service $service): JsonResponse
+    {
+        abort_unless($service->is_active, 404);
+
+        return response()->json([
+            'service' => [
+                'name' => $service->name,
+                'description' => $service->description ?: 'Belum ada deskripsi layanan.',
+                'price' => 'Rp '.number_format($service->price, 0, ',', '.'),
+                'duration_minutes' => $service->duration_minutes,
+                'image_url' => $service->image ? asset('storage/'.$service->image) : null,
+            ],
+        ]);
     }
 
     public function about(): View
     {
-        return $this->placeholder(
-            'Tentang PitStop',
-            'PitStop membantu pelanggan merencanakan service kendaraan dengan lebih praktis dan transparan.',
-        );
+        return view('public.about');
     }
 
     public function contact(): View
     {
-        return $this->placeholder(
-            'Kontak',
-            'Informasi kontak bengkel akan dilengkapi pada tahap halaman publik berikutnya.',
-        );
+        return view('public.contact');
     }
 
-    private function placeholder(string $title, string $description): View
+    private function filteredServices(Request $request): Builder
     {
-        return view('public.placeholder', compact('title', 'description'));
+        $search = trim((string) $request->string('search'));
+
+        return Service::query()
+            ->where('is_active', true)
+            ->when($search !== '', function (Builder $query) use ($search) {
+                $query->where(function (Builder $query) use ($search) {
+                    $query
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('price', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('name');
     }
 }

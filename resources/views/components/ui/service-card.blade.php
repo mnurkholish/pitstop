@@ -1,4 +1,7 @@
-@props(['service'])
+@props([
+    'service',
+    'detail' => false,
+])
 
 <article class="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
     <x-ui.service-image :service="$service" />
@@ -13,8 +16,21 @@
             <span>Rp {{ number_format($service->price, 0, ',', '.') }}</span>
             <span>{{ $service->duration_minutes }} menit</span>
         </div>
-        <x-ui.button href="{{ route('services.index') }}" variant="secondary" size="sm" class="mt-4 w-full">
-            Lihat Detail
-        </x-ui.button>
+        @if ($detail)
+            <x-ui.button
+                type="button"
+                variant="secondary"
+                size="sm"
+                class="mt-4 w-full"
+                data-service-action="detail"
+                data-service-id="{{ $service->id }}"
+            >
+                Lihat Detail
+            </x-ui.button>
+        @else
+            <x-ui.button href="{{ route('services.index') }}" variant="secondary" size="sm" class="mt-4 w-full">
+                Lihat Detail
+            </x-ui.button>
+        @endif
     </div>
 </article>

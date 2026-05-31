@@ -1,58 +1,221 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PitStop - Sistem Booking Service Bengkel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+PitStop adalah aplikasi web Laravel untuk booking service kendaraan dan pengelolaan operasional bengkel. Pelanggan dapat membuat booking dari dashboard, memantau status booking, dan membatalkan booking yang masih menunggu. Admin dapat mengelola layanan, memproses booking aktif, serta melihat riwayat booking final.
 
-## About Laravel
+## Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.3+ dan Laravel 13
+- Laravel Breeze Blade
+- Blade, Tailwind CSS, dan Alpine.js
+- Vite
+- SQLite
+- Pest PHP
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Autentikasi berbasis session: register, login, logout, reset password, edit profil, dan soft delete akun.
+- Role `user` dan `admin` dengan navbar serta halaman yang berbeda.
+- Dashboard pelanggan dengan form booking dan estimasi harga, durasi, serta jam selesai.
+- Validasi konflik slot dan rentang waktu pada jam operasional `08:00-17:00 WIB`.
+- Booking Saya dengan pencarian AJAX, filter status, detail modal, dan pembatalan booking `pending`.
+- Dashboard admin dengan statistik layanan dan booking.
+- CRUD layanan admin dengan pencarian AJAX, pagination, gambar layanan, dan fallback logo PitStop.
+- Daftar booking aktif admin, riwayat booking final, detail modal, filter tanggal, serta pencarian AJAX.
+- Transisi status admin: `pending -> diproses/dibatalkan` dan `diproses -> selesai/dibatalkan`.
+- Preferensi tema dan ukuran font berbasis cookie.
+- Session visit counter ringan pada halaman beranda.
+- Layout responsive: navbar hamburger mobile, tabel desktop, dan card list mobile.
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Instalasi
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+npm install
+copy .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Buat file database SQLite jika belum tersedia:
 
-## Contributing
+```powershell
+New-Item database/database.sqlite -ItemType File -Force
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Jalankan migration, seeder, storage link, dan build:
 
-## Code of Conduct
+```bash
+php artisan migrate --seed
+php artisan storage:link
+npm run build
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Untuk development:
 
-## Security Vulnerabilities
+```bash
+php artisan serve
+npm run dev
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Database tetap menggunakan SQLite:
 
-## License
+```dotenv
+DB_CONNECTION=sqlite
+APP_TIMEZONE=Asia/Jakarta
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Secara default Laravel akan menggunakan `database/database.sqlite`.
+
+## Akun Demo
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@example.com` | `password` |
+| User | `user@example.com` | `password` |
+
+Seeder juga menambahkan layanan dan booking dummy:
+
+```bash
+php artisan db:seed
+```
+
+## Route Utama
+
+| Method | Route | Akses | Keterangan |
+| --- | --- | --- | --- |
+| `GET` | `/` | Guest | Beranda publik |
+| `GET` | `/services` | Publik | Placeholder katalog layanan |
+| `GET` | `/about` | Publik | Placeholder tentang PitStop |
+| `GET` | `/contact` | Publik | Placeholder kontak |
+| `GET` | `/dashboard` | User | Dashboard dan form booking pelanggan |
+| `GET` | `/my-bookings` | User | Booking Saya |
+| `POST` | `/my-bookings` | User | Simpan booking |
+| `PATCH` | `/my-bookings/{booking}/cancel` | User pemilik | Batalkan booking `pending` |
+| `GET` | `/profile` | User/Admin | Profil Breeze sesuai role |
+| `GET` | `/preferences` | User/Admin | Atur preferensi tampilan |
+| `GET` | `/admin/dashboard` | Admin | Dashboard admin |
+| `GET` | `/admin/services` | Admin | Kelola layanan |
+| `GET` | `/admin/bookings` | Admin | Booking aktif |
+| `GET` | `/admin/bookings/history` | Admin | Riwayat booking final |
+| `PATCH` | `/admin/bookings/{booking}/status` | Admin | Ubah status booking |
+
+Endpoint pencarian JSON:
+
+- `GET /my-bookings/search`
+- `GET /admin/services/search`
+- `GET /admin/bookings/search`
+- `GET /admin/bookings/history/search`
+
+## Role Access
+
+- Guest dapat membuka beranda, halaman publik, login, dan register.
+- User dapat membuka dashboard pelanggan, Booking Saya, profil, dan preferensi.
+- Admin dapat membuka dashboard admin, CRUD layanan, daftar booking aktif, riwayat booking, profil, dan preferensi.
+- Route user dan admin dipisahkan dengan middleware `auth` dan `role`.
+- Registrasi publik selalu membuat role `user`.
+- Akun yang dihapus menggunakan soft delete dan tidak dapat login kembali.
+
+## CRUD Layanan
+
+Admin dapat menambah, melihat detail, mengedit, mencari, memfilter, dan menghapus layanan. Hanya layanan aktif yang muncul pada form booking pelanggan.
+
+Upload gambar bersifat opsional dan dibatasi ke JPG, JPEG, atau PNG maksimal 2 MB. File disimpan pada disk `public` di folder `services`. Gambar lama dihapus setelah upload pengganti valid berhasil tersimpan. Layanan yang pernah dipakai booking tidak dapat dihapus permanen; admin perlu menonaktifkannya.
+
+## Booking Flow
+
+1. User login lalu mengisi form booking pada `/dashboard`.
+2. User memilih kendaraan, tanggal, jam kedatangan, slot A/B/C, dan minimal satu layanan aktif.
+3. JavaScript menghitung estimasi harga, durasi, dan jam selesai.
+4. Server memvalidasi request, menghitung ulang total dari database, memastikan jam operasional, dan menolak konflik booking aktif.
+5. Booking disimpan dengan kode `PS-0001`, status `pending`, dan snapshot harga/durasi layanan.
+6. User memantau booking melalui `/my-bookings`.
+7. Admin memproses booking aktif. Booking `selesai` atau `dibatalkan` berpindah ke riwayat.
+
+## AJAX dan JSON
+
+Pencarian Booking Saya, layanan admin, daftar booking admin, dan riwayat admin memakai Fetch API. Endpoint mengembalikan JSON berisi hasil render desktop dan mobile. UI menyediakan loading, empty, dan error state tanpa reload halaman penuh.
+
+## Cookie dan Session
+
+- Laravel Breeze memakai session untuk autentikasi dan logout menginvalidasi session aktif.
+- Beranda mencatat jumlah kunjungan selama session berjalan.
+- Cookie `pitstop_theme` menyimpan tema `light` atau `dark`.
+- Cookie `pitstop_font_size` menyimpan ukuran font `normal` atau `large`.
+
+## ERD Sederhana
+
+```mermaid
+erDiagram
+    USERS ||--o{ BOOKINGS : owns
+    BOOKINGS ||--o{ BOOKING_SERVICE : contains
+    SERVICES ||--o{ BOOKING_SERVICE : selected_in
+
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        string password
+        string role
+        datetime deleted_at
+    }
+
+    SERVICES {
+        bigint id PK
+        string name
+        text description
+        integer price
+        integer duration_minutes
+        string image
+        boolean is_active
+    }
+
+    BOOKINGS {
+        bigint id PK
+        string booking_code UK
+        bigint user_id FK
+        string slot
+        datetime start_time
+        datetime end_time
+        integer total_price
+        integer total_duration_minutes
+        string status
+    }
+
+    BOOKING_SERVICE {
+        bigint id PK
+        bigint booking_id FK
+        bigint service_id FK
+        integer price_snapshot
+        integer duration_snapshot
+    }
+```
+
+Relasi penting:
+
+- `users -> bookings`: restrict delete. User dihapus menggunakan soft delete agar histori booking tetap tersedia.
+- `bookings -> booking_service`: cascade delete.
+- `services -> booking_service`: restrict delete.
+
+## Validasi
+
+- Booking divalidasi di browser dan server. Server menghitung ulang harga, durasi, dan waktu selesai dari database.
+- Layanan divalidasi di browser melalui input HTML dan selalu divalidasi ulang di server.
+- Upload gambar dibatasi tipe dan ukuran file di server.
+- Pembatalan user serta perubahan status admin divalidasi ulang di server.
+
+## Pengujian
+
+```bash
+npm run build
+php artisan test
+git diff --check
+```
+
+## Batasan Sistem
+
+- SQLite digunakan sebagai database proyek saat ini.
+- Verifikasi email belum diwajibkan untuk booking sesuai keputusan implementasi.
+- Avatar masih menggunakan fallback inisial; upload avatar belum diaktifkan.
+- `/services`, `/about`, dan `/contact` masih berupa placeholder sederhana. Beranda sudah menampilkan ringkasan layanan aktif.
+- Belum ada pembayaran online, WhatsApp, inventory sparepart, laporan keuangan, atau multi-cabang.
+
+Hasil audit implementasi tersedia di [`docs/AUDIT-FINAL.md`](docs/AUDIT-FINAL.md).

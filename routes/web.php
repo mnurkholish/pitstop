@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/services', [PublicPageController::class, 'services'])->name('services.index');
+Route::get('/services/search', [PublicPageController::class, 'searchServices'])->name('services.search');
+Route::get('/services/{service}', [PublicPageController::class, 'showService'])->name('services.show');
 Route::get('/about', [PublicPageController::class, 'about'])->name('about');
 Route::get('/contact', [PublicPageController::class, 'contact'])->name('contact');
 

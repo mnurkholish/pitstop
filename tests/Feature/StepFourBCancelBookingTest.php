@@ -111,8 +111,8 @@ test('my bookings only renders cancellation action for pending booking', functio
     $this->actingAs($user)
         ->get('/my-bookings')
         ->assertOk()
-        ->assertSee("openCancel({$pending->id}", false)
-        ->assertDontSee("openCancel({$completed->id}", false);
+        ->assertSee('data-booking-action="cancel" data-booking-id="'.$pending->id.'" data-booking-code="PS-PENDING"', false)
+        ->assertDontSee('data-booking-action="cancel" data-booking-id="'.$completed->id.'"', false);
 });
 
 test('cancelled booking detail includes cancellation reason', function () {

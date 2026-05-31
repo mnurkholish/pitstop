@@ -86,7 +86,7 @@
                 <p class="text-sm font-medium text-blue-700">Memuat data booking...</p>
             </div>
 
-            <div x-show="! loading && ! error">
+            <div x-show="! loading && ! error" x-on:click="handleListClick($event)">
                 <div x-show="count === 0" x-cloak x-html="emptyHtml"></div>
 
                 <x-ui.responsive-table x-show="count > 0">
@@ -259,6 +259,21 @@
                         this.detailError = true;
                     } finally {
                         this.detailLoading = false;
+                    }
+                },
+                handleListClick(event) {
+                    const button = event.target.closest('[data-booking-action]');
+
+                    if (! button) {
+                        return;
+                    }
+
+                    if (button.dataset.bookingAction === 'detail') {
+                        this.openDetail(Number(button.dataset.bookingId));
+                    }
+
+                    if (button.dataset.bookingAction === 'cancel') {
+                        this.openCancel(Number(button.dataset.bookingId), button.dataset.bookingCode);
                     }
                 },
                 openCancel(bookingId, bookingCode) {

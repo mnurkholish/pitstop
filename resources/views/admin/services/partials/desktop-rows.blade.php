@@ -1,8 +1,13 @@
 @foreach ($services as $service)
     <tr>
         <td class="px-4 py-3">
-            <p class="font-semibold text-slate-700">{{ $service->name }}</p>
-            <p class="mt-1 max-w-md truncate text-xs text-slate-400">{{ $service->description ?: 'Tanpa deskripsi' }}</p>
+            <div class="flex items-center gap-3">
+                <x-ui.service-image :service="$service" size="thumbnail" />
+                <div class="min-w-0">
+                    <p class="font-semibold text-slate-700">{{ $service->name }}</p>
+                    <p class="mt-1 max-w-md truncate text-xs text-slate-400">{{ $service->description ?: 'Tanpa deskripsi' }}</p>
+                </div>
+            </div>
         </td>
         <td class="px-4 py-3 font-semibold text-slate-700">Rp {{ number_format($service->price, 0, ',', '.') }}</td>
         <td class="px-4 py-3 text-slate-600">{{ $service->duration_minutes }} menit</td>

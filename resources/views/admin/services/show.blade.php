@@ -6,9 +6,7 @@
             </x-slot>
         </x-ui.page-header>
         <x-ui.card class="mt-6">
-            <div class="flex min-h-48 items-center justify-center rounded-xl bg-blue-50">
-                <span class="flex size-16 items-center justify-center rounded-2xl bg-blue-600 text-lg font-bold text-white">PS</span>
-            </div>
+            <x-ui.service-image :service="$service" size="detail" />
             <div class="mt-5 flex items-start justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-blue-900">{{ $service->name }}</h2>

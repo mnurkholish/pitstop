@@ -2,7 +2,7 @@
     <div class="pitstop-container py-8 sm:py-10">
         <x-ui.page-header title="Edit Layanan" description="Perbarui informasi layanan bengkel." />
         <x-ui.card class="mt-6">
-            <form method="POST" action="{{ route('admin.services.update', $service) }}">
+            <form method="POST" action="{{ route('admin.services.update', $service) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 @include('admin.services.form', ['service' => $service])

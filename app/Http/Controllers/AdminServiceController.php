@@ -10,7 +10,9 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Throwable;
 
 class AdminServiceController extends Controller
 {
@@ -42,7 +44,20 @@ class AdminServiceController extends Controller
 
     public function store(StoreServiceRequest $request): RedirectResponse
     {
-        Service::create($request->validated());
+        $validated = $request->validated();
+        $image = $request->file('image')?->store('services', 'public');
+
+        if ($image) {
+            $validated['image'] = $image;
+        }
+
+        try {
+            Service::create($validated);
+        } catch (Throwable $exception) {
+            $this->deleteImage($image);
+
+            throw $exception;
+        }
 
         return redirect()
             ->route('admin.services.index')
@@ -61,7 +76,27 @@ class AdminServiceController extends Controller
 
     public function update(UpdateServiceRequest $request, Service $service): RedirectResponse
     {
-        $service->update($request->validated());
+        $validated = $request->validated();
+        $oldImage = $service->image;
+        $newImage = $request->file('image')?->store('services', 'public');
+
+        if ($newImage) {
+            $validated['image'] = $newImage;
+        } else {
+            unset($validated['image']);
+        }
+
+        try {
+            $service->update($validated);
+        } catch (Throwable $exception) {
+            $this->deleteImage($newImage);
+
+            throw $exception;
+        }
+
+        if ($newImage && $oldImage) {
+            $this->deleteImage($oldImage);
+        }
 
         return redirect()
             ->route('admin.services.index')
@@ -83,6 +118,8 @@ class AdminServiceController extends Controller
                 ->route('admin.services.index')
                 ->with('error', 'Layanan sudah pernah dipakai booking dan tidak dapat dihapus. Nonaktifkan layanan jika sudah tidak tersedia.');
         }
+
+        $this->deleteImage($service->image);
 
         return redirect()
             ->route('admin.services.index')
@@ -114,5 +151,12 @@ class AdminServiceController extends Controller
                 });
             })
             ->latest();
+    }
+
+    private function deleteImage(?string $image): void
+    {
+        if ($image) {
+            Storage::disk('public')->delete($image);
+        }
     }
 }

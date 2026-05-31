@@ -18,4 +18,18 @@
     <textarea id="description" name="description" rows="5" class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500" placeholder="Jelaskan layanan bengkel">{{ old('description', $service?->description) }}</textarea>
     <x-form.error name="description" />
 </div>
-<x-ui.alert variant="info" class="mt-5">Upload gambar masih ditunda. Sistem menggunakan fallback logo PitStop jika gambar belum tersedia.</x-ui.alert>
+<div class="mt-5">
+    <label for="image" class="mb-1.5 block text-sm font-medium text-slate-700">Gambar Layanan</label>
+    @if ($service?->image)
+        <x-ui.service-image :service="$service" size="thumbnail" class="mb-3" />
+    @endif
+    <input
+        id="image"
+        name="image"
+        type="file"
+        accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+        class="block w-full rounded-lg border border-slate-300 bg-white text-sm text-slate-700 shadow-sm file:mr-4 file:border-0 file:bg-blue-50 file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100 focus:border-blue-500 focus:ring-blue-500"
+    >
+    <p class="mt-1.5 text-xs text-slate-500">Format JPG, JPEG, atau PNG. Maksimal 2 MB. Kosongkan jika tidak ingin mengganti gambar.</p>
+    <x-form.error name="image" />
+</div>

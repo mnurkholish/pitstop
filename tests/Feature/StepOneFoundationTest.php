@@ -127,9 +127,42 @@ test('services used by bookings cannot be deleted', function () {
     expect(fn () => $service->delete())->toThrow(QueryException::class);
 });
 
-test('users with bookings cannot be deleted', function () {
+test('users with bookings are soft deleted and their booking history remains', function () {
     $user = User::factory()->create();
-    createBooking($user);
+    $booking = createBooking($user);
 
-    expect(fn () => $user->delete())->toThrow(QueryException::class);
+    $user->delete();
+
+    $this->assertSoftDeleted($user);
+    $this->assertDatabaseHas('bookings', [
+        'id' => $booking->id,
+        'user_id' => $user->id,
+    ]);
+    expect($booking->fresh()->user->is($user))->toBeTrue();
+});
+
+test('soft deleted users cannot login', function () {
+    $user = User::factory()->create();
+    $user->delete();
+
+    $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    $this->assertGuest();
+});
+
+test('email from a soft deleted user cannot be registered again', function () {
+    $user = User::factory()->create();
+    $user->delete();
+
+    $this->post('/register', [
+        'name' => 'Replacement User',
+        'email' => $user->email,
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ])->assertSessionHasErrors('email');
+
+    expect(User::withTrashed()->where('email', $user->email)->count())->toBe(1);
 });

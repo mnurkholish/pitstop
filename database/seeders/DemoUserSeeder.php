@@ -10,23 +10,25 @@ class DemoUserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::updateOrCreate(
+        User::withTrashed()->updateOrCreate(
             ['email' => 'admin@example.com'],
             [
                 'name' => 'Admin PitStop',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
                 'email_verified_at' => now(),
+                'deleted_at' => null,
             ],
         );
 
-        User::updateOrCreate(
+        User::withTrashed()->updateOrCreate(
             ['email' => 'user@example.com'],
             [
-                'name' => 'Santosi',
+                'name' => 'Kholish',
                 'password' => Hash::make('password'),
                 'role' => 'user',
                 'email_verified_at' => now(),
+                'deleted_at' => null,
             ],
         );
     }

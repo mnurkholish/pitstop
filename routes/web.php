@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminBookingController;
 use App\Http\Controllers\AdminPlaceholderController;
 use App\Http\Controllers\AdminServiceController;
 use App\Http\Controllers\HomeController;
@@ -23,8 +24,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
     Route::get('/services/search', [AdminServiceController::class, 'search'])->name('services.search');
     Route::resource('/services', AdminServiceController::class);
-    Route::get('/bookings', [AdminPlaceholderController::class, 'bookings'])->name('bookings.index');
+    Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
+    Route::get('/bookings/search', [AdminBookingController::class, 'search'])->name('bookings.search');
     Route::get('/bookings/history', [AdminPlaceholderController::class, 'history'])->name('bookings.history');
+    Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
 });
 
 Route::middleware(['auth', 'role:user'])->prefix('my-bookings')->name('user.bookings.')->group(function () {

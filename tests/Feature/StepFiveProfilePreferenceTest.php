@@ -94,6 +94,16 @@ test('preferences reject unsupported values', function () {
         ->assertSessionHasErrors(['theme', 'font_size']);
 });
 
+test('preference stylesheet keeps dark selections readable and large font effective', function () {
+    $css = file_get_contents(resource_path('css/app.css'));
+
+    expect($css)
+        ->toContain('html.pitstop-font-large')
+        ->toContain('font-size: 20px !important')
+        ->toContain('.pitstop-theme-dark .bg-blue-50')
+        ->toContain('.pitstop-theme-dark .text-blue-700');
+});
+
 test('soft delete account flow remains available from refreshed profile', function () {
     $user = User::factory()->create(['role' => 'user']);
 

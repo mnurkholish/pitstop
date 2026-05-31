@@ -6,11 +6,6 @@ use Illuminate\View\View;
 
 class AdminPlaceholderController extends Controller
 {
-    public function services(): View
-    {
-        return $this->placeholder('Kelola Layanan', 'CRUD layanan akan dibangun pada tahap berikutnya.');
-    }
-
     public function bookings(): View
     {
         return $this->placeholder('Daftar Booking', 'Pengelolaan booking aktif akan dibangun pada tahap berikutnya.');

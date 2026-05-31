@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminPlaceholderController;
+use App\Http\Controllers\AdminServiceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPageController;
@@ -20,7 +21,8 @@ Route::get('/dashboard', UserDashboardController::class)
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
-    Route::get('/services', [AdminPlaceholderController::class, 'services'])->name('services.index');
+    Route::get('/services/search', [AdminServiceController::class, 'search'])->name('services.search');
+    Route::resource('/services', AdminServiceController::class);
     Route::get('/bookings', [AdminPlaceholderController::class, 'bookings'])->name('bookings.index');
     Route::get('/bookings/history', [AdminPlaceholderController::class, 'history'])->name('bookings.history');
 });

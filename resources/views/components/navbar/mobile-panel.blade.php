@@ -17,7 +17,7 @@
 
     <div class="mt-3 space-y-1 border-t border-slate-100 pt-3">
         <x-navbar.mobile-link :href="route('profile.edit')" :active="request()->routeIs('profile.*')">Profil Saya</x-navbar.mobile-link>
-        <x-navbar.mobile-link href="{{ url('/preferences') }}" :active="request()->is('preferences')">Atur Preferensi</x-navbar.mobile-link>
+        <x-navbar.mobile-link :href="route('preferences.edit')" :active="request()->routeIs('preferences.*')">Atur Preferensi</x-navbar.mobile-link>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="block w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-600 transition hover:bg-red-50">

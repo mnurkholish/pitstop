@@ -1,5 +1,9 @@
+@php
+    $theme = in_array(request()->cookie('pitstop_theme'), ['light', 'dark'], true) ? request()->cookie('pitstop_theme') : 'light';
+    $fontSize = in_array(request()->cookie('pitstop_font_size'), ['normal', 'large'], true) ? request()->cookie('pitstop_font_size') : 'normal';
+@endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="pitstop-theme-{{ $theme }} pitstop-font-{{ $fontSize }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">

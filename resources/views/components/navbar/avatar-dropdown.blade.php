@@ -15,7 +15,7 @@
             <p class="truncate text-xs text-slate-500">{{ Auth::user()->email }}</p>
         </div>
         <x-dropdown-link :href="route('profile.edit')">Profil Saya</x-dropdown-link>
-        <x-dropdown-link href="{{ url('/preferences') }}">Atur Preferensi</x-dropdown-link>
+        <x-dropdown-link :href="route('preferences.edit')">Atur Preferensi</x-dropdown-link>
         <form method="POST" action="{{ route('logout') }}" class="border-t border-slate-100">
             @csrf
             <x-dropdown-link :href="route('logout')" class="text-red-600 hover:bg-red-50" onclick="event.preventDefault(); this.closest('form').submit();">

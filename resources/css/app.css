@@ -6,6 +6,53 @@
     [x-cloak] {
         display: none !important;
     }
+
+    .pitstop-font-large {
+        font-size: 112.5%;
+    }
+
+    .pitstop-theme-dark body {
+        background-color: rgb(2 6 23);
+        color: rgb(226 232 240);
+    }
+
+    .pitstop-theme-dark .bg-white {
+        background-color: rgb(15 23 42);
+    }
+
+    .pitstop-theme-dark .bg-slate-50 {
+        background-color: rgb(2 6 23);
+    }
+
+    .pitstop-theme-dark .bg-slate-100 {
+        background-color: rgb(30 41 59);
+    }
+
+    .pitstop-theme-dark .border-slate-100,
+    .pitstop-theme-dark .border-slate-200,
+    .pitstop-theme-dark .border-slate-300 {
+        border-color: rgb(51 65 85);
+    }
+
+    .pitstop-theme-dark .text-slate-400,
+    .pitstop-theme-dark .text-slate-500 {
+        color: rgb(148 163 184);
+    }
+
+    .pitstop-theme-dark .text-slate-600,
+    .pitstop-theme-dark .text-slate-700,
+    .pitstop-theme-dark .text-slate-800,
+    .pitstop-theme-dark .text-blue-900 {
+        color: rgb(226 232 240);
+    }
+
+    .pitstop-theme-dark input,
+    .pitstop-theme-dark select,
+    .pitstop-theme-dark textarea {
+        border-color: rgb(51 65 85);
+        background-color: rgb(15 23 42);
+        color: rgb(226 232 240);
+    }
 }
 
 @layer components {

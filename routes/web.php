@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminBookingHistoryController;
 use App\Http\Controllers\AdminServiceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PreferenceController;
 use App\Http\Controllers\PublicPageController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\UserBookingController;
@@ -45,6 +46,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/preferences', [PreferenceController::class, 'edit'])->name('preferences.edit');
+    Route::patch('/preferences', [PreferenceController::class, 'update'])->name('preferences.update');
 });
 
 require __DIR__.'/auth.php';

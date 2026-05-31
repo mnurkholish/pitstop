@@ -1,29 +1,37 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+    <div class="pitstop-container py-8 sm:py-10">
+        <x-ui.page-header title="Profil Saya" description="Kelola informasi akun dan keamanan profilmu." />
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+        <x-ui.card class="mt-6">
+            <div class="flex flex-col gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-center">
+                <x-navbar.avatar class="size-16 text-lg" />
+                <div>
+                    <h2 class="text-lg font-bold text-blue-900">{{ $user->name }}</h2>
+                    <p class="mt-1 text-sm text-slate-500">{{ $user->email }}</p>
+                    <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-blue-600">{{ $user->role === 'admin' ? 'Admin' : 'Pelanggan' }}</p>
+                </div>
+            </div>
+            <p class="mt-4 text-sm text-slate-500">Avatar masih menggunakan fallback inisial. Upload foto profil belum diaktifkan.</p>
+        </x-ui.card>
+
+        <div class="mt-6 space-y-6">
+            <x-ui.card>
                 <div class="max-w-xl">
                     @include('profile.partials.update-profile-information-form')
                 </div>
-            </div>
+            </x-ui.card>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+            <x-ui.card>
                 <div class="max-w-xl">
                     @include('profile.partials.update-password-form')
                 </div>
-            </div>
+            </x-ui.card>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+            <x-ui.card>
                 <div class="max-w-xl">
                     @include('profile.partials.delete-user-form')
                 </div>
-            </div>
+            </x-ui.card>
         </div>
     </div>
 </x-app-layout>

@@ -22,6 +22,9 @@
         <x-slot name="actions">
             <p class="text-sm font-semibold text-blue-700">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
             <x-ui.button type="button" variant="secondary" size="sm" x-on:click="openDetail({{ $booking->id }})">Detail</x-ui.button>
+            @if ($booking->status === 'pending')
+                <x-ui.button type="button" variant="danger" size="sm" x-on:click="openCancel({{ $booking->id }}, @js($booking->booking_code))">Batalkan</x-ui.button>
+            @endif
         </x-slot>
     </x-ui.mobile-data-card>
 @endforeach

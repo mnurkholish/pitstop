@@ -31,6 +31,7 @@ Route::middleware(['auth', 'role:user'])->prefix('my-bookings')->name('user.book
     Route::get('/', [UserBookingController::class, 'index'])->name('index');
     Route::post('/', [UserBookingController::class, 'store'])->name('store');
     Route::get('/search', [UserBookingController::class, 'search'])->name('search');
+    Route::patch('/{booking}/cancel', [UserBookingController::class, 'cancel'])->name('cancel');
     Route::get('/{booking}', [UserBookingController::class, 'show'])->name('show');
 });
 

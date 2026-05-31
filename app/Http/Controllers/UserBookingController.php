@@ -95,6 +95,42 @@ class UserBookingController extends Controller
         ]);
     }
 
+    public function cancel(Request $request, Booking $booking): RedirectResponse
+    {
+        $validated = $request->validate([
+            'cancel_reason' => ['required', 'string', 'min:3', 'max:255'],
+        ]);
+
+        $cancelledBooking = DB::transaction(function () use ($request, $booking, $validated) {
+            $ownedBooking = $request->user()
+                ->bookings()
+                ->whereKey($booking->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ($ownedBooking->status !== 'pending') {
+                return null;
+            }
+
+            $ownedBooking->update([
+                'status' => 'dibatalkan',
+                'cancel_reason' => $validated['cancel_reason'],
+            ]);
+
+            return $ownedBooking;
+        });
+
+        if (! $cancelledBooking) {
+            return redirect()
+                ->route('user.bookings.index')
+                ->with('error', 'Booking hanya dapat dibatalkan selama masih berstatus Menunggu.');
+        }
+
+        return redirect()
+            ->route('user.bookings.index')
+            ->with('success', "Booking {$cancelledBooking->booking_code} berhasil dibatalkan.");
+    }
+
     private function filteredBookings(Request $request)
     {
         $search = trim((string) $request->string('search'));

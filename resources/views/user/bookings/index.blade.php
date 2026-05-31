@@ -4,6 +4,7 @@
         x-data="bookingList({
             searchUrl: @js(route('user.bookings.search')),
             detailUrl: @js(route('user.bookings.show', ['booking' => '__BOOKING__'])),
+            cancelUrl: @js(route('user.bookings.cancel', ['booking' => '__BOOKING__'])),
         })"
     >
         <section>
@@ -15,6 +16,12 @@
 
             @if (session('success'))
                 <x-ui.alert variant="success" class="mt-5">{{ session('success') }}</x-ui.alert>
+            @endif
+            @if (session('error'))
+                <x-ui.alert variant="danger" class="mt-5">{{ session('error') }}</x-ui.alert>
+            @endif
+            @if ($errors->has('cancel_reason'))
+                <x-ui.alert variant="danger" class="mt-5">{{ $errors->first('cancel_reason') }}</x-ui.alert>
             @endif
 
             <div class="mt-7 grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -149,8 +156,45 @@
                         <p class="text-xs text-slate-400">Pesan Tambahan</p>
                         <p class="mt-1 text-slate-700" x-text="detail.notes"></p>
                     </div>
+                    <template x-if="detail.cancel_reason">
+                        <div class="mt-3 rounded-xl bg-red-50 p-3 text-sm">
+                            <p class="text-xs text-red-500">Alasan Pembatalan</p>
+                            <p class="mt-1 text-red-700" x-text="detail.cancel_reason"></p>
+                        </div>
+                    </template>
                 </div>
             </template>
+        </x-ui.modal>
+
+        <x-ui.modal name="cancel-booking" title="Batalkan Booking" max-width="md">
+            <form :action="cancelAction" method="POST">
+                @csrf
+                @method('PATCH')
+                <p class="text-sm text-slate-600">
+                    Kamu akan membatalkan booking <span class="font-semibold text-blue-700" x-text="cancelBookingCode"></span>.
+                    Tindakan ini tidak dapat dibatalkan kembali.
+                </p>
+                <div class="mt-4">
+                    <label for="cancel_reason" class="mb-1.5 block text-sm font-medium text-slate-700">
+                        Alasan Pembatalan <span class="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        id="cancel_reason"
+                        name="cancel_reason"
+                        rows="4"
+                        minlength="3"
+                        maxlength="255"
+                        required
+                        class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500"
+                        placeholder="Jelaskan alasan pembatalan booking"
+                    ></textarea>
+                    <p class="mt-1.5 text-xs text-slate-400">Minimal 3 karakter dan maksimal 255 karakter.</p>
+                </div>
+                <div class="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                    <x-ui.button type="button" variant="secondary" x-on:click="$dispatch('close')">Kembali</x-ui.button>
+                    <x-ui.button type="submit" variant="danger">Ya, Batalkan Booking</x-ui.button>
+                </div>
+            </form>
         </x-ui.modal>
     </div>
 
@@ -168,6 +212,8 @@
                 detail: null,
                 detailLoading: false,
                 detailError: false,
+                cancelBookingId: null,
+                cancelBookingCode: '',
                 async fetchBookings() {
                     this.loading = true;
                     this.error = false;
@@ -214,6 +260,14 @@
                     } finally {
                         this.detailLoading = false;
                     }
+                },
+                openCancel(bookingId, bookingCode) {
+                    this.cancelBookingId = bookingId;
+                    this.cancelBookingCode = bookingCode;
+                    this.$dispatch('open-modal', 'cancel-booking');
+                },
+                get cancelAction() {
+                    return config.cancelUrl.replace('__BOOKING__', this.cancelBookingId);
                 },
                 get detailFields() {
                     if (! this.detail) {

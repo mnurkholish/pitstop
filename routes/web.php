@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminPlaceholderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPageController;
@@ -16,9 +18,12 @@ Route::get('/dashboard', UserDashboardController::class)
     ->middleware(['auth', 'role:user'])
     ->name('dashboard');
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard-placeholder');
-})->middleware(['auth', 'role:admin'])->name('admin.dashboard');
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+    Route::get('/services', [AdminPlaceholderController::class, 'services'])->name('services.index');
+    Route::get('/bookings', [AdminPlaceholderController::class, 'bookings'])->name('bookings.index');
+    Route::get('/bookings/history', [AdminPlaceholderController::class, 'history'])->name('bookings.history');
+});
 
 Route::middleware(['auth', 'role:user'])->prefix('my-bookings')->name('user.bookings.')->group(function () {
     Route::get('/', [UserBookingController::class, 'index'])->name('index');

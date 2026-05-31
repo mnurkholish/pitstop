@@ -1,9 +1,9 @@
 @php
     $links = [
         ['label' => 'Dashboard Admin', 'href' => route('admin.dashboard'), 'active' => request()->routeIs('admin.dashboard')],
-        ['label' => 'Kelola Layanan', 'href' => url('/admin/services'), 'active' => request()->is('admin/services*')],
-        ['label' => 'Daftar Booking', 'href' => url('/admin/bookings'), 'active' => request()->is('admin/bookings')],
-        ['label' => 'Riwayat Booking', 'href' => url('/admin/bookings/history'), 'active' => request()->is('admin/bookings/history')],
+        ['label' => 'Kelola Layanan', 'href' => route('admin.services.index'), 'active' => request()->routeIs('admin.services.*')],
+        ['label' => 'Daftar Booking', 'href' => route('admin.bookings.index'), 'active' => request()->routeIs('admin.bookings.index')],
+        ['label' => 'Riwayat Booking', 'href' => route('admin.bookings.history'), 'active' => request()->routeIs('admin.bookings.history')],
     ];
 @endphp
 

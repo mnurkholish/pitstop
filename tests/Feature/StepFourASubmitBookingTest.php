@@ -174,3 +174,28 @@ test('booking submit permits overlap with final bookings', function (string $sta
 
     expect(Booking::count())->toBe(2);
 })->with(['selesai', 'dibatalkan']);
+
+test('booking submit rejects schedules outside operating hours', function (string $arrivalTime, int $duration) {
+    $user = User::factory()->create(['role' => 'user']);
+    $service = createSubmitService(['duration_minutes' => $duration]);
+
+    $this->actingAs($user)
+        ->post('/my-bookings', bookingPayload($service, ['arrival_time' => $arrivalTime]))
+        ->assertSessionHasErrors('arrival_time');
+
+    expect(Booking::count())->toBe(0);
+})->with([
+    'before opening' => ['07:59', 30],
+    'finishes after closing' => ['16:31', 30],
+]);
+
+test('booking submit permits a schedule ending exactly at closing time', function () {
+    $user = User::factory()->create(['role' => 'user']);
+    $service = createSubmitService(['duration_minutes' => 60]);
+
+    $this->actingAs($user)
+        ->post('/my-bookings', bookingPayload($service, ['arrival_time' => '16:00']))
+        ->assertRedirect(route('user.bookings.index'));
+
+    expect(Booking::firstOrFail()->end_time->format('H:i'))->toBe('17:00');
+});

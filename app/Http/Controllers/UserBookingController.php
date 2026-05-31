@@ -135,6 +135,8 @@ class UserBookingController extends Controller
         $totalDuration = $services->sum('duration_minutes');
         $endTime = $startTime->copy()->addMinutes($totalDuration);
 
+        $this->ensureWithinOperatingHours($startTime, $endTime);
+
         if (Booking::query()->conflicting($validated['slot'], $startTime, $endTime)->exists()) {
             throw ValidationException::withMessages([
                 'slot' => 'Slot dan waktu yang dipilih bertabrakan dengan booking aktif lain.',
@@ -181,6 +183,18 @@ class UserBookingController extends Controller
         if ($services->count() !== count($requestedServiceIds)) {
             throw ValidationException::withMessages([
                 'services' => 'Pilih layanan aktif yang masih tersedia.',
+            ]);
+        }
+    }
+
+    private function ensureWithinOperatingHours(Carbon $startTime, Carbon $endTime): void
+    {
+        $openingTime = $startTime->copy()->setTime(8, 0);
+        $closingTime = $startTime->copy()->setTime(17, 0);
+
+        if ($startTime->lt($openingTime) || $endTime->gt($closingTime)) {
+            throw ValidationException::withMessages([
+                'arrival_time' => 'Booking harus dimulai dan selesai dalam jam operasional 08:00 sampai 17:00.',
             ]);
         }
     }

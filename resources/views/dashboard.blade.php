@@ -88,7 +88,7 @@
                         </div>
                         <x-form.input label="Merek / Seri Kendaraan" name="vehicle_model" placeholder="Contoh: Toyota Avanza" required />
                         <x-form.input label="Tanggal Service" name="service_date" type="date" required />
-                        <x-form.input label="Jam Kedatangan" name="arrival_time" type="time" x-model="arrivalTime" required />
+                        <x-form.input label="Jam Kedatangan" name="arrival_time" type="time" min="08:00" max="17:00" x-model="arrivalTime" required />
                     </div>
 
                     <fieldset class="mt-5">
@@ -146,6 +146,7 @@
                 <aside class="space-y-4 lg:sticky lg:top-6 lg:self-start">
                     <x-ui.card>
                         <h3 class="font-semibold text-blue-900">Panel Estimasi</h3>
+                        <p class="mt-1 text-xs text-slate-500">Jam operasional bengkel: 08:00-17:00 WIB.</p>
                         <template x-if="selectedServices.length === 0">
                             <p class="mt-4 text-sm text-slate-500">Pilih minimal satu layanan untuk melihat estimasi.</p>
                         </template>

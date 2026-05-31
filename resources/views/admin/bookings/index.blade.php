@@ -4,9 +4,20 @@
         x-data="adminBookingList({
             searchUrl: @js(route('admin.bookings.search')),
             detailUrl: @js(route('admin.bookings.show', ['booking' => '__BOOKING__'])),
+            statusUrl: @js(route('admin.bookings.status.update', ['booking' => '__BOOKING__'])),
         })"
     >
         <x-ui.page-header title="Daftar Booking" description="Pantau booking aktif pelanggan yang masih menunggu atau sedang diproses." />
+
+        @if (session('success'))
+            <x-ui.alert variant="success" class="mt-5">{{ session('success') }}</x-ui.alert>
+        @endif
+        @if (session('error'))
+            <x-ui.alert variant="danger" class="mt-5">{{ session('error') }}</x-ui.alert>
+        @endif
+        @if ($errors->has('cancel_reason'))
+            <x-ui.alert variant="danger" class="mt-5">{{ $errors->first('cancel_reason') }}</x-ui.alert>
+        @endif
 
         <div class="mt-7 grid grid-cols-3 gap-3">
             @foreach ([
@@ -144,6 +155,37 @@
                 </div>
             </template>
         </x-ui.modal>
+
+        <x-ui.modal name="admin-cancel-booking" title="Batalkan Booking" max-width="md">
+            <form :action="statusAction" method="POST">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="status" value="dibatalkan">
+                <p class="text-sm text-slate-600">
+                    Booking <span class="font-semibold text-blue-700" x-text="statusBookingCode"></span> akan dipindahkan ke riwayat sebagai Dibatalkan.
+                </p>
+                <div class="mt-4">
+                    <label for="admin_cancel_reason" class="mb-1.5 block text-sm font-medium text-slate-700">
+                        Alasan Pembatalan <span class="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        id="admin_cancel_reason"
+                        name="cancel_reason"
+                        rows="4"
+                        minlength="3"
+                        maxlength="255"
+                        required
+                        class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500"
+                        placeholder="Jelaskan alasan pembatalan booking"
+                    ></textarea>
+                    <p class="mt-1.5 text-xs text-slate-400">Minimal 3 karakter dan maksimal 255 karakter.</p>
+                </div>
+                <div class="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                    <x-ui.button type="button" variant="secondary" x-on:click="$dispatch('close')">Kembali</x-ui.button>
+                    <x-ui.button type="submit" variant="danger">Ya, Batalkan Booking</x-ui.button>
+                </div>
+            </form>
+        </x-ui.modal>
     </div>
 
     <script>
@@ -161,6 +203,8 @@
                 detail: null,
                 detailLoading: false,
                 detailError: false,
+                statusBookingId: null,
+                statusBookingCode: '',
                 async fetchBookings() {
                     this.loading = true;
                     this.error = false;
@@ -191,10 +235,18 @@
                     }
                 },
                 handleListClick(event) {
-                    const button = event.target.closest('[data-booking-action="detail"]');
+                    const button = event.target.closest('[data-booking-action]');
 
-                    if (button) {
+                    if (! button) {
+                        return;
+                    }
+
+                    if (button.dataset.bookingAction === 'detail') {
                         this.openDetail(Number(button.dataset.bookingId));
+                    }
+
+                    if (button.dataset.bookingAction === 'cancel') {
+                        this.openCancel(Number(button.dataset.bookingId), button.dataset.bookingCode);
                     }
                 },
                 async openDetail(bookingId) {
@@ -218,6 +270,14 @@
                     } finally {
                         this.detailLoading = false;
                     }
+                },
+                openCancel(bookingId, bookingCode) {
+                    this.statusBookingId = bookingId;
+                    this.statusBookingCode = bookingCode;
+                    this.$dispatch('open-modal', 'admin-cancel-booking');
+                },
+                get statusAction() {
+                    return config.statusUrl.replace('__BOOKING__', this.statusBookingId);
                 },
                 get detailFields() {
                     if (! this.detail) {

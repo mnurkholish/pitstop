@@ -29,6 +29,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/bookings/history', [AdminBookingHistoryController::class, 'index'])->name('bookings.history');
     Route::get('/bookings/history/search', [AdminBookingHistoryController::class, 'search'])->name('bookings.history.search');
     Route::get('/bookings/history/{booking}', [AdminBookingHistoryController::class, 'show'])->name('bookings.history.show');
+    Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.status.update');
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
 });
 

@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class AdminBookingController extends Controller
@@ -62,6 +65,51 @@ class AdminBookingController extends Controller
         ]);
     }
 
+    public function updateStatus(Request $request, Booking $booking): RedirectResponse
+    {
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(['diproses', 'selesai', 'dibatalkan'])],
+            'cancel_reason' => [
+                Rule::requiredIf($request->input('status') === 'dibatalkan'),
+                'nullable',
+                'string',
+                'min:3',
+                'max:255',
+            ],
+        ]);
+
+        $result = DB::transaction(function () use ($booking, $validated) {
+            $lockedBooking = Booking::query()
+                ->whereKey($booking->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if (! $this->canTransition($lockedBooking->status, $validated['status'])) {
+                return null;
+            }
+
+            $lockedBooking->update([
+                'status' => $validated['status'],
+                'cancel_reason' => $validated['status'] === 'dibatalkan'
+                    ? $validated['cancel_reason']
+                    : null,
+                'completed_at' => $validated['status'] === 'selesai' ? now() : null,
+            ]);
+
+            return $lockedBooking;
+        });
+
+        if (! $result) {
+            return redirect()
+                ->route('admin.bookings.index')
+                ->with('error', 'Perubahan status booking tidak diizinkan.');
+        }
+
+        return redirect()
+            ->route('admin.bookings.index')
+            ->with('success', "Status booking {$result->booking_code} berhasil diperbarui.");
+    }
+
     private function filteredBookings(Request $request): Builder
     {
         $search = trim((string) $request->string('search'));
@@ -95,6 +143,15 @@ class AdminBookingController extends Controller
             'pending' => (clone $bookings)->where('status', 'pending')->count(),
             'processing' => (clone $bookings)->where('status', 'diproses')->count(),
         ];
+    }
+
+    private function canTransition(string $currentStatus, string $nextStatus): bool
+    {
+        return in_array($nextStatus, match ($currentStatus) {
+            'pending' => ['diproses', 'dibatalkan'],
+            'diproses' => ['selesai', 'dibatalkan'],
+            default => [],
+        }, true);
     }
 
     private function formatCurrency(int $amount): string

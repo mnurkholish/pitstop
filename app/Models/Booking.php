@@ -65,4 +65,26 @@ class Booking extends Model
             ->where('start_time', '<', $endTime)
             ->where('end_time', '>', $startTime);
     }
+
+    public function statusLabel(): string
+    {
+        return match ($this->status) {
+            'pending' => 'Menunggu',
+            'diproses' => 'Diproses',
+            'selesai' => 'Selesai',
+            'dibatalkan' => 'Dibatalkan',
+            default => ucfirst($this->status),
+        };
+    }
+
+    public function statusBadgeVariant(): string
+    {
+        return match ($this->status) {
+            'pending' => 'pending',
+            'diproses' => 'processing',
+            'selesai' => 'success',
+            'dibatalkan' => 'danger',
+            default => 'neutral',
+        };
+    }
 }

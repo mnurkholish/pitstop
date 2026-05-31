@@ -29,6 +29,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
 Route::middleware(['auth', 'role:user'])->prefix('my-bookings')->name('user.bookings.')->group(function () {
     Route::get('/', [UserBookingController::class, 'index'])->name('index');
+    Route::post('/', [UserBookingController::class, 'store'])->name('store');
     Route::get('/search', [UserBookingController::class, 'search'])->name('search');
     Route::get('/{booking}', [UserBookingController::class, 'show'])->name('show');
 });

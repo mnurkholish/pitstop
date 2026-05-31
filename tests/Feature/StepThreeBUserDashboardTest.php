@@ -39,7 +39,7 @@ test('customer dashboard only renders bookings owned by the authenticated user',
         ->assertDontSee('PS-PRIVATE');
 });
 
-test('customer dashboard only offers active services in booking preview form', function () {
+test('customer dashboard only offers active services in booking form', function () {
     $user = User::factory()->create(['role' => 'user']);
     Service::create([
         'name' => 'Service Aktif',
@@ -62,7 +62,7 @@ test('customer dashboard only offers active services in booking preview form', f
         ->assertSee('Buat Booking Baru')
         ->assertSee('Service Aktif')
         ->assertDontSee('Service Nonaktif')
-        ->assertSee('Form booking masih berupa pratinjau UI');
+        ->assertSee('Booking Sekarang');
 });
 
 test('customer dashboard renders booking status labels', function (string $status, string $label) {

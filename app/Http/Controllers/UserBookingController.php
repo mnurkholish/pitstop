@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\StoreBookingRequest;
 use App\Models\Booking;
+use App\Models\Service;
+use Illuminate\Contracts\Cache\LockTimeoutException;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class UserBookingController extends Controller
@@ -19,6 +29,26 @@ class UserBookingController extends Controller
             'bookings' => $bookings,
             'summary' => $this->summary($request),
         ]);
+    }
+
+    public function store(StoreBookingRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        try {
+            $booking = Cache::lock("booking-slot:{$validated['slot']}", 10)->block(
+                5,
+                fn () => DB::transaction(fn () => $this->createBooking($request, $validated)),
+            );
+        } catch (LockTimeoutException) {
+            throw ValidationException::withMessages([
+                'slot' => 'Slot sedang diproses oleh booking lain. Silakan coba lagi.',
+            ]);
+        }
+
+        return redirect()
+            ->route('user.bookings.index')
+            ->with('success', "Booking {$booking->booking_code} berhasil dibuat.");
     }
 
     public function search(Request $request): JsonResponse
@@ -65,7 +95,7 @@ class UserBookingController extends Controller
         ]);
     }
 
-    private function filteredBookings(Request $request): HasMany
+    private function filteredBookings(Request $request)
     {
         $search = trim((string) $request->string('search'));
         $status = (string) $request->string('status');
@@ -84,6 +114,75 @@ class UserBookingController extends Controller
                 });
             })
             ->latest('start_time');
+    }
+
+    /**
+     * @param  array<string, mixed>  $validated
+     */
+    private function createBooking(Request $request, array $validated): Booking
+    {
+        $services = Service::query()
+            ->whereKey($validated['services'])
+            ->where('is_active', true)
+            ->get();
+
+        $this->ensureAllServicesAreActive($services, $validated['services']);
+
+        $startTime = Carbon::createFromFormat(
+            'Y-m-d H:i',
+            "{$validated['service_date']} {$validated['arrival_time']}",
+        );
+        $totalDuration = $services->sum('duration_minutes');
+        $endTime = $startTime->copy()->addMinutes($totalDuration);
+
+        if (Booking::query()->conflicting($validated['slot'], $startTime, $endTime)->exists()) {
+            throw ValidationException::withMessages([
+                'slot' => 'Slot dan waktu yang dipilih bertabrakan dengan booking aktif lain.',
+            ]);
+        }
+
+        $booking = Booking::create([
+            'booking_code' => 'TMP-'.Str::uuid(),
+            'user_id' => $request->user()->id,
+            'slot' => $validated['slot'],
+            'start_time' => $startTime,
+            'end_time' => $endTime,
+            'customer_name' => $validated['customer_name'],
+            'plate_number' => Str::upper($validated['plate_number']),
+            'vehicle_type' => $validated['vehicle_type'],
+            'vehicle_model' => $validated['vehicle_model'],
+            'total_price' => $services->sum('price'),
+            'total_duration_minutes' => $totalDuration,
+            'status' => 'pending',
+            'notes' => $validated['notes'] ?? null,
+        ]);
+
+        $booking->update([
+            'booking_code' => sprintf('PS-%04d', $booking->id),
+        ]);
+        $booking->services()->attach(
+            $services->mapWithKeys(fn (Service $service) => [
+                $service->id => [
+                    'price_snapshot' => $service->price,
+                    'duration_snapshot' => $service->duration_minutes,
+                ],
+            ]),
+        );
+
+        return $booking;
+    }
+
+    /**
+     * @param  Collection<int, Service>  $services
+     * @param  array<int, int|string>  $requestedServiceIds
+     */
+    private function ensureAllServicesAreActive(Collection $services, array $requestedServiceIds): void
+    {
+        if ($services->count() !== count($requestedServiceIds)) {
+            throw ValidationException::withMessages([
+                'services' => 'Pilih layanan aktif yang masih tersedia.',
+            ]);
+        }
     }
 
     private function summary(Request $request): array

@@ -13,6 +13,10 @@
                 </x-slot>
             </x-ui.page-header>
 
+            @if (session('success'))
+                <x-ui.alert variant="success" class="mt-5">{{ session('success') }}</x-ui.alert>
+            @endif
+
             <div class="mt-7 grid grid-cols-2 gap-3 lg:grid-cols-4">
                 @foreach ([
                     ['Total Booking', $summary['total'], 'bg-blue-100 text-blue-700'],

@@ -1,12 +1,16 @@
 <x-user-layout>
     <div
         class="pitstop-container py-8 sm:py-10"
-        x-data="bookingEstimator(@js($services->map(fn ($service) => [
-            'id' => $service->id,
-            'name' => $service->name,
-            'price' => $service->price,
-            'duration' => $service->duration_minutes,
-        ])->values()))"
+        x-data="bookingEstimator(
+            @js($services->map(fn ($service) => [
+                'id' => $service->id,
+                'name' => $service->name,
+                'price' => $service->price,
+                'duration' => $service->duration_minutes,
+            ])->values()),
+            @js(old('services', [])),
+            @js(old('arrival_time', '')),
+        )"
     >
         <section>
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -53,19 +57,34 @@
 
         <section class="mt-10">
             <h2 class="text-lg font-bold text-blue-900">Buat Booking Baru</h2>
-            <p class="mt-1 text-sm text-slate-500">Isi rencana service dan lihat estimasi langsung. Penyimpanan booking akan diaktifkan pada tahap berikutnya.</p>
+            <p class="mt-1 text-sm text-slate-500">Isi rencana service dan lihat estimasi langsung sebelum mengirim booking.</p>
 
-            <form class="mt-4 grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]" @submit.prevent>
+            @if ($errors->any())
+                <x-ui.alert variant="danger" class="mt-4">
+                    Booking belum dapat dibuat. Periksa kembali field yang ditandai.
+                </x-ui.alert>
+            @endif
+
+            <form
+                action="{{ route('user.bookings.store') }}"
+                method="POST"
+                class="mt-4 grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]"
+                @submit="if (selectedIds.length === 0) { $event.preventDefault(); serviceError = true }"
+            >
+                @csrf
                 <x-ui.card>
                     <div class="grid gap-4 sm:grid-cols-2">
                         <x-form.input label="Nama Pelanggan" name="customer_name" :value="Auth::user()->name" required readonly />
-                        <x-form.input label="Nomor Plat" name="plate_number" placeholder="Contoh: B 1234 XYZ" required />
+                        <x-form.input label="Nomor Plat" name="plate_number" placeholder="Contoh: B 1234 XYZ" x-on:input="$event.target.value = $event.target.value.toUpperCase()" required />
                         <div>
                             <label for="vehicle_type" class="mb-1.5 block text-sm font-medium text-slate-700">Jenis Kendaraan <span class="text-red-500">*</span></label>
-                            <select id="vehicle_type" name="vehicle_type" class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option>Mobil</option>
-                                <option>Motor</option>
+                            <select id="vehicle_type" name="vehicle_type" required class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">Pilih jenis kendaraan</option>
+                                @foreach (['Mobil', 'Motor'] as $vehicleType)
+                                    <option value="{{ $vehicleType }}" @selected(old('vehicle_type') === $vehicleType)>{{ $vehicleType }}</option>
+                                @endforeach
                             </select>
+                            <x-form.error name="vehicle_type" />
                         </div>
                         <x-form.input label="Merek / Seri Kendaraan" name="vehicle_model" placeholder="Contoh: Toyota Avanza" required />
                         <x-form.input label="Tanggal Service" name="service_date" type="date" required />
@@ -77,13 +96,14 @@
                         <div class="mt-2 grid grid-cols-3 gap-2">
                             @foreach (['A', 'B', 'C'] as $slot)
                                 <label class="cursor-pointer">
-                                    <input type="radio" name="slot" value="{{ $slot }}" class="peer sr-only">
+                                    <input type="radio" name="slot" value="{{ $slot }}" class="peer sr-only" @checked(old('slot') === $slot) required>
                                     <span class="block rounded-xl border border-slate-200 px-3 py-3 text-center text-sm font-semibold text-slate-600 transition peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700">
                                         Slot {{ $slot }}
                                     </span>
                                 </label>
                             @endforeach
                         </div>
+                        <x-form.error name="slot" />
                     </fieldset>
 
                     <fieldset class="mt-5">
@@ -91,7 +111,7 @@
                         <div class="mt-2 grid gap-3 sm:grid-cols-2">
                             @forelse ($services as $service)
                                 <label class="cursor-pointer">
-                                    <input type="checkbox" name="services[]" value="{{ $service->id }}" x-model.number="selectedIds" class="peer sr-only">
+                                    <input type="checkbox" name="services[]" value="{{ $service->id }}" x-model.number="selectedIds" @change="serviceError = false" class="peer sr-only">
                                     <span
                                         class="flex items-start gap-3 rounded-xl border p-3 transition"
                                         :class="selectedIds.includes({{ $service->id }}) ? 'border-blue-600 bg-blue-50' : 'border-slate-200'"
@@ -110,17 +130,17 @@
                                 <p class="text-sm text-slate-500">Belum ada layanan aktif.</p>
                             @endforelse
                         </div>
+                        <x-form.error name="services" />
+                        <p x-show="serviceError" x-cloak class="mt-1.5 text-xs font-medium text-red-600">Pilih minimal satu layanan.</p>
                     </fieldset>
 
                     <div class="mt-5">
                         <label for="notes" class="mb-1.5 block text-sm font-medium text-slate-700">Pesan Tambahan</label>
-                        <textarea id="notes" name="notes" rows="4" class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500" placeholder="Contoh: mesin berbunyi kasar saat pagi hari"></textarea>
+                        <textarea id="notes" name="notes" rows="4" class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500" placeholder="Contoh: mesin berbunyi kasar saat pagi hari">{{ old('notes') }}</textarea>
+                        <x-form.error name="notes" />
                     </div>
 
-                    <x-ui.alert variant="info" class="mt-5">
-                        Form booking masih berupa pratinjau UI. Tombol simpan akan diaktifkan bersama validasi server pada tahap flow booking.
-                    </x-ui.alert>
-                    <x-ui.button type="button" class="mt-4 w-full" disabled>Booking Sekarang</x-ui.button>
+                    <x-ui.button type="submit" class="mt-5 w-full">Booking Sekarang</x-ui.button>
                 </x-ui.card>
 
                 <aside class="space-y-4 lg:sticky lg:top-6 lg:self-start">
@@ -182,11 +202,12 @@
     </div>
 
     <script>
-        function bookingEstimator(services) {
+        function bookingEstimator(services, selectedIds = [], arrivalTime = '') {
             return {
                 services,
-                selectedIds: [],
-                arrivalTime: '',
+                selectedIds: selectedIds.map(Number),
+                arrivalTime,
+                serviceError: false,
                 get selectedServices() {
                     return this.services.filter(service => this.selectedIds.includes(service.id));
                 },

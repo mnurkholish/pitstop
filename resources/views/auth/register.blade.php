@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mb-5">
-        <h1 class="text-xl font-bold text-blue-900">Daftar Akun PitStop</h1>
+        <h1 class="text-xl font-bold text-blue-900">Register</h1>
     </div>
 
     <form method="POST" action="{{ route('register') }}">
@@ -40,10 +40,10 @@
 
         <div class="flex items-center justify-end mt-4">
             <x-primary-button class="ms-4">
-                Daftar
+                Register
             </x-primary-button>
         </div>
     </form>
 
-    <x-auth.navigation :back-href="route('home')" prompt="Sudah punya akun?" :action-href="route('login')" action-label="Masuk" />
+    <x-auth.navigation :back-href="route('home')" prompt="Sudah punya akun?" :action-href="route('login')" action-label="Login" />
 </x-guest-layout>

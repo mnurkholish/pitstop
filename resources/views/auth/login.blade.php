@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mb-5">
-        <h1 class="text-xl font-bold text-blue-900">Masuk ke PitStop</h1>
+        <h1 class="text-xl font-bold text-blue-900">Login</h1>
     </div>
 
     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -41,10 +41,10 @@
             @endif
 
             <x-primary-button class="ms-3">
-                Masuk
+                Login
             </x-primary-button>
         </div>
     </form>
 
-    <x-auth.navigation :back-href="route('home')" prompt="Belum punya akun?" :action-href="route('register')" action-label="Daftar" />
+    <x-auth.navigation :back-href="route('home')" prompt="Belum punya akun?" :action-href="route('register')" action-label="Register" />
 </x-guest-layout>

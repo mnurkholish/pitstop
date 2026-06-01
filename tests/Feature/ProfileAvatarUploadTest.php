@@ -70,17 +70,17 @@ test('avatar upload rejects unsupported files and files larger than two megabyte
         ->assertSessionHasErrors('avatar');
 });
 
-test('auth pages use Indonesian navigation copy', function () {
+test('auth pages use common auth labels with Indonesian navigation copy', function () {
     $this->get('/login')
         ->assertOk()
-        ->assertSee('Masuk ke PitStop')
+        ->assertSee('Login')
         ->assertSee('Belum punya akun?')
         ->assertSee('Lupa password?')
         ->assertSee('Kembali');
 
     $this->get('/register')
         ->assertOk()
-        ->assertSee('Daftar Akun PitStop')
+        ->assertSee('Register')
         ->assertSee('Sudah punya akun?')
         ->assertSee('Kembali');
 

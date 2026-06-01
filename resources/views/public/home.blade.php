@@ -11,7 +11,7 @@
                     <span class="block text-blue-600">Tanpa Antre</span>
                 </h1>
                 <p class="mt-4 max-w-xl text-base leading-7 text-slate-500">
-                    Pilih layanan, tentukan jadwal, dan pantau status booking kendaraanmu secara online dari mana saja.
+                    Pilih layanan, tentukan jadwal, dan lihat progress service kendaraanmu dengan mudah.
                 </p>
                 <div class="mt-7 flex flex-col gap-3 sm:flex-row">
                     <x-ui.button href="{{ route('login', ['redirect' => '/dashboard']) }}" size="lg">
@@ -38,13 +38,8 @@
             </div>
 
             <div class="relative overflow-hidden rounded-3xl bg-blue-100 p-5 sm:p-8">
-                <img
-                    src="{{ asset('images/hero.png') }}"
-                    alt="PitStop Service Center"
-                    width="612"
-                    height="408"
-                    class="aspect-[3/2] w-full rounded-2xl object-cover"
-                >
+                <img src="{{ asset('images/hero.png') }}" alt="PitStop Service Center" width="612" height="408"
+                    class="aspect-[3/2] w-full rounded-2xl object-cover">
                 <div class="absolute bottom-3 left-3 rounded-xl bg-white px-4 py-3 shadow-lg sm:bottom-5 sm:left-5">
                     <p class="text-xs font-semibold text-emerald-700">Booking Praktis</p>
                     <p class="mt-1 text-xs text-slate-400">Jadwal service tersusun rapi</p>
@@ -61,13 +56,12 @@
         <div class="pitstop-container">
             <div class="mx-auto max-w-2xl text-center">
                 <h2 class="text-2xl font-bold text-blue-900 sm:text-3xl">Layanan Unggulan</h2>
-                <p class="mt-2 text-sm leading-6 text-slate-500">Berbagai layanan perawatan kendaraan tersedia dengan
-                    estimasi harga yang transparan.</p>
+                <p class="mt-2 text-sm leading-6 text-slate-500">Pilihan perawatan kendaraan.</p>
             </div>
 
             @if ($services->isEmpty())
                 <x-ui.empty-state class="mt-8" title="Layanan belum tersedia"
-                    description="Layanan aktif PitStop akan segera ditampilkan di sini." />
+                    description="Layanan akan segera ditampilkan." />
             @else
                 <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($services as $service)
@@ -86,15 +80,13 @@
         <div class="pitstop-container">
             <div class="mx-auto max-w-2xl text-center">
                 <h2 class="text-2xl font-bold text-blue-900 sm:text-3xl">Kenapa Pilih PitStop?</h2>
-                <p class="mt-2 text-sm leading-6 text-slate-500">Kami hadir untuk membuat pengalaman service kendaraanmu
-                    lebih mudah dan menyenangkan.</p>
+                <p class="mt-2 text-sm leading-6 text-slate-500">Service kendaraan jadi lebih mudah, rapi, dan nyaman
+                    untuk direncanakan.</p>
             </div>
             <div class="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                @foreach ([['Booking Online', 'Booking service kapan saja dan dari mana saja tanpa perlu antre.'], ['Harga Transparan', 'Estimasi biaya terlihat jelas sebelum service dimulai.'], ['Estimasi Durasi', 'Ketahui estimasi lama pengerjaan sehingga waktu lebih terencana.'], ['Riwayat Tersimpan', 'Semua riwayat service kendaraan tersimpan rapi di akun kamu.']] as [$title, $description])
+                @foreach ([['Booking Online', 'Buat jadwal service tanpa harus antre langsung di bengkel.'], ['Harga Transparan', 'Perkiraan biaya bisa dilihat sebelum datang ke bengkel.'], ['Estimasi Durasi', 'Perkiraan waktu pengerjaan membantu kamu mengatur jadwal dengan lebih baik.'], ['Riwayat Tersimpan', 'Riwayat service kendaraan tersimpan rapi di akun kamu.']] as [$title, $description])
                     <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 text-center">
-                        <span
-                            class="mx-auto flex size-11 items-center justify-center rounded-xl bg-blue-100 text-sm font-bold text-blue-700">PS</span>
-                        <h3 class="mt-4 font-semibold text-slate-800">{{ $title }}</h3>
+                        <h3 class="font-semibold text-slate-800">{{ $title }}</h3>
                         <p class="mt-2 text-sm leading-6 text-slate-500">{{ $description }}</p>
                     </div>
                 @endforeach
@@ -106,11 +98,11 @@
         <div class="pitstop-container">
             <div class="mx-auto max-w-2xl text-center">
                 <h2 class="text-2xl font-bold text-blue-900 sm:text-3xl">Cara Kerja PitStop</h2>
-                <p class="mt-2 text-sm leading-6 text-slate-500">Tiga langkah mudah untuk booking service kendaraanmu.
-                </p>
+                <p class="mt-2 text-sm leading-6 text-slate-500">Booking service kendaraan bisa dilakukan dalam tiga
+                    langkah sederhana.</p>
             </div>
             <div class="mt-9 grid gap-5 lg:grid-cols-3">
-                @foreach ([['01', 'Buat Akun', 'Daftar dengan email dan buat akun gratis kamu dalam hitungan detik.'], ['02', 'Pilih Layanan & Jadwal', 'Pilih layanan yang kamu butuhkan dan tentukan tanggal serta jam kedatangan.'], ['03', 'Datang & Selesai', 'Datang ke bengkel sesuai jadwal. Kami akan menyelesaikan service kendaraanmu.']] as [$number, $title, $description])
+                @foreach ([['01', 'Buat Akun', 'Daftar dengan email untuk mulai menggunakan PitStop.'], ['02', 'Pilih Layanan & Jadwal', 'Pilih layanan yang dibutuhkan, lalu tentukan tanggal dan jam kedatangan.'], ['03', 'Datang & Selesai', 'Datang sesuai jadwal dan serahkan kendaraan untuk dikerjakan.']] as [$number, $title, $description])
                     <x-ui.card class="relative">
                         <span
                             class="absolute -top-3 left-5 rounded-full bg-blue-600 px-2.5 py-1 text-xs font-bold text-white">{{ $number }}</span>
@@ -125,7 +117,7 @@
     <section class="bg-blue-900 py-14 text-center text-white sm:py-16">
         <div class="pitstop-container">
             <h2 class="text-2xl font-bold sm:text-3xl">Siap service kendaraanmu?</h2>
-            <p class="mt-2 text-sm text-blue-200">Daftar gratis dan buat booking pertamamu sekarang juga.</p>
+            <p class="mt-2 text-sm text-blue-200">Buat akun dan mulai jadwalkan service kendaraanmu.</p>
             <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
                 <x-ui.button href="{{ route('register') }}" size="lg">Daftar Sekarang</x-ui.button>
                 <x-ui.button href="{{ route('login') }}" variant="secondary" size="lg">Masuk</x-ui.button>

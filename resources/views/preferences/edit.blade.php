@@ -13,14 +13,17 @@
             <x-ui.card>
                 <fieldset>
                     <legend class="text-base font-semibold text-blue-900">Tema Tampilan</legend>
-                    <p class="mt-1 text-sm text-slate-500">Pilih tema terang atau gelap untuk dashboard.</p>
+                    <p class="mt-1 text-sm text-slate-500">Pilih tema PitStop.</p>
                     <div class="mt-4 grid gap-3 sm:grid-cols-2">
                         @foreach (['light' => 'Light', 'dark' => 'Dark'] as $value => $label)
                             <label class="cursor-pointer">
-                                <input type="radio" name="theme" value="{{ $value }}" class="peer sr-only" @checked(old('theme', $theme) === $value)>
-                                <span class="block rounded-xl border border-slate-200 p-4 transition peer-checked:border-blue-600 peer-checked:bg-blue-50">
+                                <input type="radio" name="theme" value="{{ $value }}" class="peer sr-only"
+                                    @checked(old('theme', $theme) === $value)>
+                                <span
+                                    class="block rounded-xl border border-slate-200 p-4 transition peer-checked:border-blue-600 peer-checked:bg-blue-50">
                                     <span class="block font-semibold text-slate-700">{{ $label }}</span>
-                                    <span class="mt-1 block text-xs text-slate-500">{{ $value === 'light' ? 'Tampilan terang dan bersih.' : 'Tampilan gelap yang nyaman di kondisi redup.' }}</span>
+                                    <span
+                                        class="mt-1 block text-xs text-slate-500">{{ $value === 'light' ? 'Tampilan terang dengan warna yang bersih.' : 'Tampilan gelap yang nyaman di tempat redup.' }}</span>
                                 </span>
                             </label>
                         @endforeach
@@ -30,14 +33,17 @@
 
                 <fieldset class="mt-7 border-t border-slate-200 pt-6">
                     <legend class="text-base font-semibold text-blue-900">Ukuran Font</legend>
-                    <p class="mt-1 text-sm text-slate-500">Atur ukuran teks antarmuka sesuai kebutuhan.</p>
+                    <p class="mt-1 text-sm text-slate-500">Atur ukuran teks sesuai kebutuhanmu.</p>
                     <div class="mt-4 grid gap-3 sm:grid-cols-2">
                         @foreach (['normal' => 'Normal', 'large' => 'Large'] as $value => $label)
                             <label class="cursor-pointer">
-                                <input type="radio" name="font_size" value="{{ $value }}" class="peer sr-only" @checked(old('font_size', $fontSize) === $value)>
-                                <span class="block rounded-xl border border-slate-200 p-4 transition peer-checked:border-blue-600 peer-checked:bg-blue-50">
+                                <input type="radio" name="font_size" value="{{ $value }}" class="peer sr-only"
+                                    @checked(old('font_size', $fontSize) === $value)>
+                                <span
+                                    class="block rounded-xl border border-slate-200 p-4 transition peer-checked:border-blue-600 peer-checked:bg-blue-50">
                                     <span class="block font-semibold text-slate-700">{{ $label }}</span>
-                                    <span class="mt-1 block text-xs text-slate-500">{{ $value === 'normal' ? 'Ukuran teks standar PitStop.' : 'Teks lebih besar agar lebih mudah dibaca.' }}</span>
+                                    <span
+                                        class="mt-1 block text-xs text-slate-500">{{ $value === 'normal' ? 'Ukuran teks standar.' : 'Teks lebih besar dan mudah dibaca.' }}</span>
                                 </span>
                             </label>
                         @endforeach

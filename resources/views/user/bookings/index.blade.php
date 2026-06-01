@@ -8,7 +8,7 @@
         })"
     >
         <section>
-            <x-ui.page-header title="Booking Saya" description="Pantau status dan riwayat booking service kendaraanmu.">
+            <x-ui.page-header title="Booking Saya" description="Lihat jadwal, status, dan riwayat service kendaraanmu.">
                 <x-slot name="actions">
                     <x-ui.button href="{{ route('dashboard') }}">Buat Booking Baru</x-ui.button>
                 </x-slot>
@@ -171,8 +171,8 @@
                 @csrf
                 @method('PATCH')
                 <p class="text-sm text-slate-600">
-                    Kamu akan membatalkan booking <span class="font-semibold text-blue-700" x-text="cancelBookingCode"></span>.
-                    Tindakan ini tidak dapat dibatalkan kembali.
+                    Booking <span class="font-semibold text-blue-700" x-text="cancelBookingCode"></span> akan dibatalkan
+                    dan tidak bisa dikembalikan.
                 </p>
                 <div class="mt-4">
                     <label for="cancel_reason" class="mb-1.5 block text-sm font-medium text-slate-700">

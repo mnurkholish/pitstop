@@ -1,6 +1,6 @@
 <x-admin-layout>
     <div class="pitstop-container py-8 sm:py-10">
-        <x-ui.page-header title="Tambah Layanan" description="Tambahkan layanan bengkel baru untuk pelanggan." />
+        <x-ui.page-header title="Tambah Layanan" description="Tambahkan layanan bengkel baru." />
         <x-ui.card class="mt-6">
             <form method="POST" action="{{ route('admin.services.store') }}" enctype="multipart/form-data">
                 @csrf

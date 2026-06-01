@@ -30,6 +30,6 @@
         accept=".jpg,.jpeg,.png,image/jpeg,image/png"
         class="block w-full rounded-lg border border-slate-300 bg-white text-sm text-slate-700 shadow-sm file:mr-4 file:border-0 file:bg-blue-50 file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100 focus:border-blue-500 focus:ring-blue-500"
     >
-    <p class="mt-1.5 text-xs text-slate-500">Format JPG, JPEG, atau PNG. Maksimal 2 MB. Kosongkan jika tidak ingin mengganti gambar.</p>
+    <p class="mt-1.5 text-xs text-slate-500">Gunakan gambar JPG, JPEG, atau PNG maksimal 2 MB. Kosongkan jika gambar tidak diganti.</p>
     <x-form.error name="image" />
 </div>

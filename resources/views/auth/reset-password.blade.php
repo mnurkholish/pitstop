@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mb-5">
         <h1 class="text-xl font-bold text-blue-900">Atur Ulang Password</h1>
-        <p class="mt-1 text-sm text-slate-500">Buat password baru anda.</p>
+        <p class="mt-1 text-sm text-slate-500">Buat password baru.</p>
     </div>
 
     <form method="POST" action="{{ route('password.store') }}">

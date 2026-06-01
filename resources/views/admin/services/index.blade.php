@@ -5,7 +5,7 @@
             searchUrl: @js(route('admin.services.search')),
         })"
     >
-        <x-ui.page-header title="Kelola Layanan" description="Tambah, ubah, dan kelola layanan bengkel yang tersedia untuk pelanggan.">
+        <x-ui.page-header title="Kelola Layanan" description="Tambah, ubah, dan atur layanan bengkel untuk pelanggan.">
             <x-slot name="actions">
                 <x-ui.button href="{{ route('admin.services.create') }}">Tambah Layanan</x-ui.button>
             </x-slot>

@@ -2,7 +2,7 @@
     <header>
         <h2 class="text-lg font-semibold text-blue-900">Informasi Profil</h2>
 
-        <p class="mt-1 text-sm text-slate-500">Perbarui nama dan alamat email akunmu.</p>
+        <p class="mt-1 text-sm text-slate-500">Perbarui nama dan email yang digunakan pada akunmu.</p>
     </header>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
@@ -52,7 +52,7 @@
                 accept=".jpg,.jpeg,.png,image/jpeg,image/png"
                 class="mt-1 block w-full rounded-lg border border-slate-300 bg-white text-sm text-slate-700 shadow-sm file:mr-4 file:border-0 file:bg-blue-50 file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100 focus:border-blue-500 focus:ring-blue-500"
             >
-            <p class="mt-1.5 text-xs text-slate-500">Format JPG, JPEG, atau PNG. Maksimal 2 MB. Kosongkan jika tidak ingin mengganti foto.</p>
+            <p class="mt-1.5 text-xs text-slate-500">Gunakan gambar JPG, JPEG, atau PNG maksimal 2 MB. Kosongkan jika foto tidak diganti.</p>
             <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
         </div>
 

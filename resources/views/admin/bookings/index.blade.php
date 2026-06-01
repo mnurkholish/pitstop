@@ -1,13 +1,10 @@
 <x-admin-layout>
-    <div
-        class="pitstop-container py-8 sm:py-10"
-        x-data="adminBookingList({
-            searchUrl: @js(route('admin.bookings.search')),
-            detailUrl: @js(route('admin.bookings.show', ['booking' => '__BOOKING__'])),
-            statusUrl: @js(route('admin.bookings.status.update', ['booking' => '__BOOKING__'])),
-        })"
-    >
-        <x-ui.page-header title="Daftar Booking" description="Pantau booking aktif pelanggan yang masih menunggu atau sedang diproses." />
+    <div class="pitstop-container py-8 sm:py-10" x-data="adminBookingList({
+        searchUrl: @js(route('admin.bookings.search')),
+        detailUrl: @js(route('admin.bookings.show', ['booking' => '__BOOKING__'])),
+        statusUrl: @js(route('admin.bookings.status.update', ['booking' => '__BOOKING__'])),
+    })">
+        <x-ui.page-header title="Daftar Booking" description="Kelola booking pelanggan." />
 
         @if (session('success'))
             <x-ui.alert variant="success" class="mt-5">{{ session('success') }}</x-ui.alert>
@@ -20,13 +17,10 @@
         @endif
 
         <div class="mt-7 grid grid-cols-3 gap-3">
-            @foreach ([
-                ['Booking Aktif', $summary['total'], 'bg-blue-100 text-blue-700'],
-                ['Menunggu', $summary['pending'], 'bg-amber-100 text-amber-700'],
-                ['Diproses', $summary['processing'], 'bg-blue-100 text-blue-700'],
-            ] as [$label, $value, $color])
+            @foreach ([['Booking Aktif', $summary['total'], 'bg-blue-100 text-blue-700'], ['Menunggu', $summary['pending'], 'bg-amber-100 text-amber-700'], ['Diproses', $summary['processing'], 'bg-blue-100 text-blue-700']] as [$label, $value, $color])
                 <x-ui.card class="flex items-center gap-3 p-4">
-                    <span class="flex size-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold {{ $color }}">PS</span>
+                    <span
+                        class="flex size-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold {{ $color }}">PS</span>
                     <div>
                         <p class="text-2xl font-bold text-blue-900">{{ $value }}</p>
                         <p class="text-xs text-slate-500">{{ $label }}</p>
@@ -39,32 +33,22 @@
             <div class="grid gap-3 lg:grid-cols-[minmax(0,1fr)_12rem] lg:items-center">
                 <label>
                     <span class="sr-only">Cari booking aktif</span>
-                    <input
-                        type="search"
-                        x-model="search"
-                        @input.debounce.350ms="fetchBookings"
+                    <input type="search" x-model="search" @input.debounce.350ms="fetchBookings"
                         placeholder="Cari kode, pelanggan, plat nomor, layanan, atau status..."
-                        class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500"
-                    >
+                        class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500">
                 </label>
                 <label>
                     <span class="sr-only">Filter tanggal booking</span>
-                    <input
-                        type="date"
-                        x-model="date"
-                        @change="fetchBookings"
-                        class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    >
+                    <input type="date" x-model="date" @change="fetchBookings"
+                        class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </label>
             </div>
             <div class="mt-3 flex gap-2 overflow-x-auto pb-1">
                 @foreach (['' => 'Semua', 'pending' => 'Menunggu', 'diproses' => 'Diproses'] as $value => $label)
-                    <button
-                        type="button"
-                        @click="status = @js($value); fetchBookings()"
-                        :class="status === @js($value) ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'"
-                        class="whitespace-nowrap rounded-lg border px-3 py-2 text-xs font-semibold transition"
-                    >
+                    <button type="button" @click="status = @js($value); fetchBookings()"
+                        :class="status === @js($value) ? 'border-blue-600 bg-blue-600 text-white' :
+                            'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'"
+                        class="whitespace-nowrap rounded-lg border px-3 py-2 text-xs font-semibold transition">
                         {{ $label }}
                     </button>
                 @endforeach
@@ -75,7 +59,8 @@
             <x-ui.alert x-show="error" x-cloak variant="danger" class="mb-4">
                 Gagal memuat booking aktif. Silakan coba lagi.
             </x-ui.alert>
-            <div x-show="loading" x-cloak class="rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center shadow-sm">
+            <div x-show="loading" x-cloak
+                class="rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center shadow-sm">
                 <p class="text-sm font-medium text-blue-700">Memuat data booking...</p>
             </div>
             <div x-show="! loading && ! error" x-on:click="handleListClick($event)">
@@ -120,7 +105,8 @@
                             <p class="text-xs text-slate-400">Kode Booking</p>
                             <p class="mt-1 font-bold text-blue-700" x-text="detail.booking_code"></p>
                         </div>
-                        <span class="rounded-full px-2.5 py-1 text-xs font-semibold" :class="badgeClass(detail.status_variant)" x-text="detail.status_label"></span>
+                        <span class="rounded-full px-2.5 py-1 text-xs font-semibold"
+                            :class="badgeClass(detail.status_variant)" x-text="detail.status_label"></span>
                     </div>
                     <dl class="mt-4 grid grid-cols-2 gap-3 text-sm">
                         <template x-for="[label, value] in detailFields" :key="label">
@@ -136,7 +122,8 @@
                             <div class="mt-2 flex justify-between gap-3 rounded-xl border border-slate-200 p-3 text-sm">
                                 <span>
                                     <span class="block font-medium text-slate-700" x-text="service.name"></span>
-                                    <span class="text-xs text-slate-400" x-text="`${service.duration_minutes} menit`"></span>
+                                    <span class="text-xs text-slate-400"
+                                        x-text="`${service.duration_minutes} menit`"></span>
                                 </span>
                                 <span class="font-semibold text-slate-700" x-text="service.price"></span>
                             </div>
@@ -162,26 +149,21 @@
                 @method('PATCH')
                 <input type="hidden" name="status" value="dibatalkan">
                 <p class="text-sm text-slate-600">
-                    Booking <span class="font-semibold text-blue-700" x-text="statusBookingCode"></span> akan dipindahkan ke riwayat sebagai Dibatalkan.
+                    Booking <span class="font-semibold text-blue-700" x-text="statusBookingCode"></span> akan ditandai
+                    sebagai Dibatalkan.
                 </p>
                 <div class="mt-4">
                     <label for="admin_cancel_reason" class="mb-1.5 block text-sm font-medium text-slate-700">
                         Alasan Pembatalan <span class="text-red-500">*</span>
                     </label>
-                    <textarea
-                        id="admin_cancel_reason"
-                        name="cancel_reason"
-                        rows="4"
-                        minlength="3"
-                        maxlength="255"
-                        required
+                    <textarea id="admin_cancel_reason" name="cancel_reason" rows="4" minlength="3" maxlength="255" required
                         class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500"
-                        placeholder="Jelaskan alasan pembatalan booking"
-                    ></textarea>
+                        placeholder="Jelaskan alasan pembatalan booking"></textarea>
                     <p class="mt-1.5 text-xs text-slate-400">Minimal 3 karakter dan maksimal 255 karakter.</p>
                 </div>
                 <div class="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-                    <x-ui.button type="button" variant="secondary" x-on:click="$dispatch('close')">Kembali</x-ui.button>
+                    <x-ui.button type="button" variant="secondary"
+                        x-on:click="$dispatch('close')">Kembali</x-ui.button>
                     <x-ui.button type="submit" variant="danger">Ya, Batalkan Booking</x-ui.button>
                 </div>
             </form>
@@ -216,10 +198,12 @@
                             date: this.date,
                         });
                         const response = await fetch(`${config.searchUrl}?${query}`, {
-                            headers: { Accept: 'application/json' },
+                            headers: {
+                                Accept: 'application/json'
+                            },
                         });
 
-                        if (! response.ok) {
+                        if (!response.ok) {
                             throw new Error('Request gagal');
                         }
 
@@ -237,7 +221,7 @@
                 handleListClick(event) {
                     const button = event.target.closest('[data-booking-action]');
 
-                    if (! button) {
+                    if (!button) {
                         return;
                     }
 
@@ -257,9 +241,13 @@
 
                     try {
                         const url = config.detailUrl.replace('__BOOKING__', bookingId);
-                        const response = await fetch(url, { headers: { Accept: 'application/json' } });
+                        const response = await fetch(url, {
+                            headers: {
+                                Accept: 'application/json'
+                            }
+                        });
 
-                        if (! response.ok) {
+                        if (!response.ok) {
                             throw new Error('Request gagal');
                         }
 
@@ -280,7 +268,7 @@
                     return config.statusUrl.replace('__BOOKING__', this.statusBookingId);
                 },
                 get detailFields() {
-                    if (! this.detail) {
+                    if (!this.detail) {
                         return [];
                     }
 
@@ -302,7 +290,7 @@
                         processing: 'bg-blue-100 text-blue-700',
                         success: 'bg-emerald-100 text-emerald-700',
                         danger: 'bg-red-100 text-red-700',
-                    }[variant] || 'bg-slate-100 text-slate-600';
+                    } [variant] || 'bg-slate-100 text-slate-600';
                 },
             };
         }

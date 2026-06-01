@@ -2,7 +2,7 @@
     <div class="mb-5">
         <h1 class="text-xl font-bold text-blue-900">Lupa Password</h1>
         <p class="mt-1 text-sm leading-6 text-slate-500">
-            Masukkan email akunmu. Kami akan mengirimkan tautan untuk mengatur ulang password.
+            Masukkan email untuk menerima tautan reset password.
         </p>
     </div>
 
@@ -13,7 +13,8 @@
 
         <div>
             <x-input-label for="email" value="Email" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
+                required autofocus />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -24,11 +25,6 @@
         </div>
     </form>
 
-    <x-auth.navigation
-        :back-href="route('login')"
-        back-label="Kembali ke halaman masuk"
-        prompt="Belum punya akun?"
-        :action-href="route('register')"
-        action-label="Daftar"
-    />
+    <x-auth.navigation :back-href="route('login')" back-label="Kembali ke halaman masuk" prompt="Belum punya akun?"
+        :action-href="route('register')" action-label="Daftar" />
 </x-guest-layout>

@@ -16,7 +16,7 @@
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <h1 class="text-3xl font-bold tracking-tight text-blue-900">Halo, {{ Auth::user()->name }}</h1>
-                    <p class="mt-1 text-sm text-slate-500">Kelola booking service kendaraanmu dari satu tempat.</p>
+                    <p class="mt-1 text-sm text-slate-500">Atur jadwal service kendaraanmu dengan lebih mudah.</p>
                 </div>
                 <x-ui.button href="{{ url('/my-bookings') }}" variant="secondary" size="sm">Booking Saya</x-ui.button>
             </div>
@@ -45,7 +45,7 @@
                 <a href="{{ url('/my-bookings') }}" class="text-sm font-semibold text-blue-600 hover:text-blue-700">Lihat Semua</a>
             </div>
             @if ($activeBookings->isEmpty())
-                <x-ui.empty-state class="mt-4" title="Belum ada booking aktif" description="Booking yang menunggu atau sedang diproses akan tampil di sini." />
+                <x-ui.empty-state class="mt-4" title="Belum ada booking aktif" description="Booking yang menunggu atau sedang diproses akan ditampilkan di sini." />
             @else
                 <div class="mt-4 grid gap-4 lg:grid-cols-2">
                     @foreach ($activeBookings as $booking)
@@ -57,7 +57,7 @@
 
         <section class="mt-10">
             <h2 class="text-lg font-bold text-blue-900">Buat Booking Baru</h2>
-            <p class="mt-1 text-sm text-slate-500">Isi rencana service dan lihat estimasi langsung sebelum mengirim booking.</p>
+            <p class="mt-1 text-sm text-slate-500">Isi rencana service dan lihat perkiraannya sebelum booking dikirim.</p>
 
             @if ($errors->any())
                 <x-ui.alert variant="danger" class="mt-4">
@@ -148,7 +148,7 @@
                         <h3 class="font-semibold text-blue-900">Panel Estimasi</h3>
                         <p class="mt-1 text-xs text-slate-500">Jam operasional bengkel: 08:00-17:00 WIB.</p>
                         <template x-if="selectedServices.length === 0">
-                            <p class="mt-4 text-sm text-slate-500">Pilih minimal satu layanan untuk melihat estimasi.</p>
+                            <p class="mt-4 text-sm text-slate-500">Pilih minimal satu layanan untuk melihat perkiraan biaya dan durasi.</p>
                         </template>
                         <template x-for="service in selectedServices" :key="service.id">
                             <div class="mt-3 flex justify-between gap-3 text-sm">
@@ -191,7 +191,7 @@
                 <a href="{{ url('/my-bookings') }}" class="text-sm font-semibold text-blue-600 hover:text-blue-700">Booking Saya</a>
             </div>
             @if ($recentBookings->isEmpty())
-                <x-ui.empty-state class="mt-4" title="Belum ada riwayat booking" description="Riwayat booking terbaru akan tampil di sini." />
+                <x-ui.empty-state class="mt-4" title="Belum ada riwayat booking" description="Riwayat booking terbaru akan ditampilkan di sini." />
             @else
                 <div class="mt-4 grid gap-4 lg:grid-cols-3">
                     @foreach ($recentBookings as $booking)

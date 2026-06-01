@@ -2,7 +2,7 @@
     <header>
         <h2 class="text-lg font-semibold text-blue-900">Ubah Password</h2>
 
-        <p class="mt-1 text-sm text-slate-500">Gunakan password yang kuat untuk menjaga keamanan akun.</p>
+        <p class="mt-1 text-sm text-slate-500">Gunakan password yang kuat agar akun tetap aman.</p>
     </header>
 
     <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">

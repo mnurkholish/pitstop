@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mb-5">
-        <h1 class="text-xl font-bold text-blue-900">Daftar Akun</h1>
+        <h1 class="text-xl font-bold text-blue-900">Daftar Akun PitStop</h1>
     </div>
 
     <form method="POST" action="{{ route('register') }}">

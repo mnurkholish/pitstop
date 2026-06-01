@@ -101,7 +101,11 @@ test('preference stylesheet keeps dark selections readable and large font effect
         ->toContain('html.pitstop-font-large')
         ->toContain('font-size: 20px !important')
         ->toContain('.pitstop-theme-dark .bg-blue-50')
-        ->toContain('.pitstop-theme-dark .text-blue-700');
+        ->toContain('.pitstop-theme-dark .text-blue-700')
+        ->toContain('.pitstop-theme-dark .bg-emerald-100')
+        ->toContain('.pitstop-theme-dark .text-red-700')
+        ->toContain('.pitstop-theme-dark option')
+        ->toContain('.pitstop-theme-dark .peer:checked + span');
 });
 
 test('soft delete account flow remains available from refreshed profile', function () {

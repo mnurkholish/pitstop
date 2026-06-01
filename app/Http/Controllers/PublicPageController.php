@@ -38,7 +38,9 @@ class PublicPageController extends Controller
                 'description' => $service->description ?: 'Belum ada deskripsi layanan.',
                 'price' => 'Rp '.number_format($service->price, 0, ',', '.'),
                 'duration_minutes' => $service->duration_minutes,
-                'image_url' => $service->image ? asset('storage/'.$service->image) : null,
+                'image_url' => $service->image
+                    ? asset('storage/'.$service->image)
+                    : asset('images/services/service-default.png'),
             ],
         ]);
     }

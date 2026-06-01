@@ -9,16 +9,15 @@
         'detail' => 'h-56 w-full rounded-xl sm:h-72',
         default => 'h-40 w-full',
     };
+    $image = $service->image
+        ? asset('storage/'.$service->image)
+        : asset('images/services/service-default.png');
 @endphp
 
-@if ($service->image)
-    <img
-        src="{{ asset('storage/'.$service->image) }}"
-        alt="{{ $service->name }}"
-        {{ $attributes->class([$classes, 'object-cover']) }}
-    >
-@else
-    <div {{ $attributes->class([$classes, 'flex items-center justify-center bg-blue-50 text-blue-600']) }}>
-        <span class="flex size-10 items-center justify-center rounded-xl bg-blue-600 text-sm font-bold text-white">PS</span>
-    </div>
-@endif
+<img
+    src="{{ $image }}"
+    alt="{{ $service->name }}"
+    width="1536"
+    height="1024"
+    {{ $attributes->class([$classes, 'object-cover']) }}
+>

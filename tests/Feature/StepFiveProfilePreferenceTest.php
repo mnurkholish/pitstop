@@ -79,7 +79,9 @@ test('preferences are applied to admin layout', function () {
         ->withCookie('pitstop_font_size', 'large')
         ->get('/admin/dashboard')
         ->assertOk()
-        ->assertSee('pitstop-theme-dark pitstop-font-large', false);
+        ->assertSee('pitstop-theme-dark pitstop-font-large', false)
+        ->assertSee('favicons/pitstop-dark.ico', false)
+        ->assertSee('images/logo-pitstop-dark.png', false);
 });
 
 test('preferences reject unsupported values', function () {

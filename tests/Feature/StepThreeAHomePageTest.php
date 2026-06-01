@@ -19,6 +19,10 @@ test('guest homepage renders its primary sections and booking call to action', f
 
     $this->get('/')
         ->assertOk()
+        ->assertSee('favicons/pitstop-light.ico', false)
+        ->assertSee('images/logo-pitstop-light.png', false)
+        ->assertSee('images/hero.png', false)
+        ->assertSee('images/services/service-default.png', false)
         ->assertSee('Service Kendaraan')
         ->assertSee('Tanpa Antre')
         ->assertSee('Layanan Unggulan')
@@ -26,6 +30,14 @@ test('guest homepage renders its primary sections and booking call to action', f
         ->assertSee('Cara Kerja PitStop')
         ->assertSee('Siap service kendaraanmu?')
         ->assertSee(route('login', ['redirect' => '/dashboard']), escape: false);
+});
+
+test('public layout uses dark visual assets when the dark theme cookie is selected', function () {
+    $this->withCookie('pitstop_theme', 'dark')
+        ->get('/')
+        ->assertOk()
+        ->assertSee('favicons/pitstop-dark.ico', false)
+        ->assertSee('images/logo-pitstop-dark.png', false);
 });
 
 test('guest homepage only displays up to four active services', function () {

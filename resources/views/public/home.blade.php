@@ -38,15 +38,13 @@
             </div>
 
             <div class="relative overflow-hidden rounded-3xl bg-blue-100 p-5 sm:p-8">
-                <div
-                    class="flex min-h-64 items-center justify-center rounded-2xl bg-blue-600 px-6 py-10 text-center text-white sm:min-h-80">
-                    <div>
-                        <span
-                            class="mx-auto flex size-20 items-center justify-center rounded-3xl bg-white/15 text-2xl font-bold">PS</span>
-                        <p class="mt-5 text-2xl font-bold">PitStop Service Center</p>
-                        <p class="mt-2 text-sm text-blue-100">Perawatan kendaraan lebih terencana.</p>
-                    </div>
-                </div>
+                <img
+                    src="{{ asset('images/hero.png') }}"
+                    alt="PitStop Service Center"
+                    width="612"
+                    height="408"
+                    class="aspect-[3/2] w-full rounded-2xl object-cover"
+                >
                 <div class="absolute bottom-3 left-3 rounded-xl bg-white px-4 py-3 shadow-lg sm:bottom-5 sm:left-5">
                     <p class="text-xs font-semibold text-emerald-700">Booking Praktis</p>
                     <p class="mt-1 text-xs text-slate-400">Jadwal service tersusun rapi</p>

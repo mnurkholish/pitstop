@@ -18,5 +18,5 @@
         height="500"
         class="size-10 shrink-0 object-contain"
     >
-    <span class="{{ $admin ? '' : 'sr-only' }}">PitStop{{ $admin ? ' Admin' : '' }}</span>
+    <span>PitStop{{ $admin ? ' Admin' : '' }}</span>
 </span>

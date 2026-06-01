@@ -6,6 +6,7 @@ use App\Models\Service;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PublicPageController extends Controller
@@ -39,7 +40,7 @@ class PublicPageController extends Controller
                 'price' => 'Rp '.number_format($service->price, 0, ',', '.'),
                 'duration_minutes' => $service->duration_minutes,
                 'image_url' => $service->image
-                    ? asset('storage/'.$service->image)
+                    ? asset(Str::startsWith($service->image, 'images/') ? $service->image : 'storage/'.$service->image)
                     : asset('images/services/service-default.png'),
             ],
         ]);

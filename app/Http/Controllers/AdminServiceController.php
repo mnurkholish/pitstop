@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Throwable;
 
@@ -155,7 +156,7 @@ class AdminServiceController extends Controller
 
     private function deleteImage(?string $image): void
     {
-        if ($image) {
+        if ($image && ! Str::startsWith($image, 'images/')) {
             Storage::disk('public')->delete($image);
         }
     }

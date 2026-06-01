@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Service;
+use Database\Seeders\ServiceSeeder;
 
 function createHomeService(string $name, bool $isActive = true): Service
 {
@@ -71,3 +72,28 @@ test('public navbar placeholder pages are reachable', function (string $path, st
     ['/about', 'Tentang PitStop'],
     ['/contact', 'Kontak'],
 ]);
+
+test('service seeder maps demo services to bundled public images', function () {
+    $this->seed(ServiceSeeder::class);
+
+    expect(Service::where('name', 'Ganti Oli Mesin')->value('image'))
+        ->toBe('images/services/ganti-oli-mesin.png');
+});
+
+test('public service detail resolves bundled service images', function () {
+    $service = createHomeService('Ganti Oli Mesin');
+    $service->update(['image' => 'images/services/ganti-oli-mesin.png']);
+
+    $this->getJson(route('services.show', $service))
+        ->assertOk()
+        ->assertJsonPath('service.image_url', asset('images/services/ganti-oli-mesin.png'));
+});
+
+test('public contact page only displays workshop information', function () {
+    $this->get('/contact')
+        ->assertOk()
+        ->assertSee('Informasi Bengkel')
+        ->assertSee('Jam Operasional')
+        ->assertDontSee('Kirim Pesan')
+        ->assertDontSee('contact_message', false);
+});

@@ -11,7 +11,7 @@
                     <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-blue-600">{{ $user->role === 'admin' ? 'Admin' : 'Pelanggan' }}</p>
                 </div>
             </div>
-            <p class="mt-4 text-sm text-slate-500">Avatar masih menggunakan fallback inisial. Upload foto profil belum diaktifkan.</p>
+            <p class="mt-4 text-sm text-slate-500">Gunakan foto profil opsional atau fallback inisial yang tersedia otomatis.</p>
         </x-ui.card>
 
         <div class="mt-6 space-y-6">

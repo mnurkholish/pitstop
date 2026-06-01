@@ -14,6 +14,7 @@ PitStop adalah aplikasi web Laravel untuk booking service kendaraan dan pengelol
 ## Fitur Utama
 
 - Autentikasi berbasis session: register, login, logout, reset password, edit profil, dan soft delete akun.
+- Upload avatar profil opsional dengan fallback inisial pada navbar.
 - Role `user` dan `admin` dengan navbar serta halaman yang berbeda.
 - Dashboard pelanggan dengan form booking dan estimasi harga, durasi, serta jam selesai.
 - Validasi konflik slot dan rentang waktu pada jam operasional `08:00-17:00 WIB`.
@@ -214,7 +215,7 @@ git diff --check
 
 - SQLite digunakan sebagai database proyek saat ini.
 - Verifikasi email belum diwajibkan untuk booking sesuai keputusan implementasi.
-- Avatar masih menggunakan fallback inisial; upload avatar belum diaktifkan.
+- Avatar dapat diunggah dari profil dengan fallback inisial jika foto belum tersedia.
 - `/services`, `/about`, dan `/contact` masih berupa placeholder sederhana. Beranda sudah menampilkan ringkasan layanan aktif.
 - Belum ada pembayaran online, WhatsApp, inventory sparepart, laporan keuangan, atau multi-cabang.
 

@@ -15,7 +15,7 @@ test('profile uses customer layout and fallback initials for customer', function
         ->assertSee('Budi Santoso')
         ->assertSee('BS')
         ->assertSee('Pelanggan')
-        ->assertSee('Avatar masih menggunakan fallback inisial')
+        ->assertSee('fallback inisial')
         ->assertSee('Dashboard')
         ->assertDontSee('Dashboard Admin');
 });

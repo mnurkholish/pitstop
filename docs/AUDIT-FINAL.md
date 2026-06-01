@@ -94,7 +94,7 @@ Beberapa ketentuan PRD asal telah disesuaikan selama implementasi:
 - SQLite tetap digunakan, bukan MySQL.
 - Format kode booking adalah `PS-0001`, `PS-0002`, dan seterusnya.
 - Verifikasi email belum diwajibkan untuk booking.
-- Upload avatar ditunda dan navbar memakai fallback inisial.
+- Avatar dapat diunggah dari profil dan navbar memakai fallback inisial jika foto belum tersedia.
 - Delete user selalu menggunakan soft delete.
 
 ## Catatan Tersisa

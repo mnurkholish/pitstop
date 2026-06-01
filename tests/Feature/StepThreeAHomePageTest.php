@@ -63,13 +63,13 @@ test('guest homepage increments its lightweight session visit counter', function
     $this->get('/')->assertSessionHas('home_visit_count', 2);
 });
 
-test('public navbar placeholder pages are reachable', function (string $path, string $text) {
+test('public navbar pages are reachable', function (string $path, string $text) {
     $this->get($path)
         ->assertOk()
         ->assertSee($text);
 })->with([
     ['/services', 'Layanan'],
-    ['/about', 'Tentang PitStop'],
+    ['/about', 'Masalah yang Kami Selesaikan'],
     ['/contact', 'Kontak'],
 ]);
 
@@ -92,7 +92,7 @@ test('public service detail resolves bundled service images', function () {
 test('public contact page only displays workshop information', function () {
     $this->get('/contact')
         ->assertOk()
-        ->assertSee('Informasi Bengkel')
+        ->assertSee('Informasi Kontak')
         ->assertSee('Jam Operasional')
         ->assertDontSee('Kirim Pesan')
         ->assertDontSee('contact_message', false);

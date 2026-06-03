@@ -181,6 +181,31 @@
                             @endforeach
                         </div>
                     </x-ui.card>
+
+                    <div id="user-dashboard-weather-widget" hidden class="rounded-xl border border-blue-100 bg-blue-50 px-3 py-2.5 text-blue-900">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <p class="text-[10px] font-semibold uppercase text-blue-600">Cuaca</p>
+                                <p data-weather-city class="mt-0.5 truncate text-xs font-semibold text-blue-900">Jember</p>
+                                <p data-weather-desc class="truncate text-[11px] text-blue-700"></p>
+                            </div>
+                            <p data-weather-temp class="shrink-0 text-lg font-bold text-blue-900"></p>
+                        </div>
+                        <dl class="mt-2 grid grid-cols-3 gap-1 border-t border-blue-100 pt-2 text-[10px]">
+                            <div>
+                                <dt class="text-blue-500">Terasa</dt>
+                                <dd data-weather-feels class="font-semibold text-blue-900"></dd>
+                            </div>
+                            <div>
+                                <dt class="text-blue-500">Lembap</dt>
+                                <dd data-weather-humidity class="font-semibold text-blue-900"></dd>
+                            </div>
+                            <div>
+                                <dt class="text-blue-500">Angin</dt>
+                                <dd data-weather-wind class="font-semibold text-blue-900"></dd>
+                            </div>
+                        </dl>
+                    </div>
                 </aside>
             </form>
         </section>
@@ -237,6 +262,47 @@
                 },
             };
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const widget = document.getElementById('user-dashboard-weather-widget');
+
+            if (! widget) {
+                return;
+            }
+
+            fetch('https://wttr.in/Jember?format=j1')
+                .then((response) => {
+                    if (! response.ok) {
+                        throw new Error('Cuaca tidak tersedia');
+                    }
+
+                    return response.json();
+                })
+                .then((payload) => {
+                    const current = payload.current_condition?.[0];
+                    const city = payload.nearest_area?.[0]?.areaName?.[0]?.value || 'Jember';
+                    const temperature = current?.temp_C;
+                    const description = current?.weatherDesc?.[0]?.value;
+                    const feelsLike = current?.FeelsLikeC;
+                    const humidity = current?.humidity;
+                    const wind = current?.windspeedKmph;
+
+                    if (temperature === undefined || temperature === null || ! description) {
+                        return;
+                    }
+
+                    widget.querySelector('[data-weather-city]').textContent = city;
+                    widget.querySelector('[data-weather-temp]').textContent = `${temperature}°C`;
+                    widget.querySelector('[data-weather-desc]').textContent = description;
+                    widget.querySelector('[data-weather-feels]').textContent = feelsLike ? `${feelsLike}°C` : '-';
+                    widget.querySelector('[data-weather-humidity]').textContent = humidity ? `${humidity}%` : '-';
+                    widget.querySelector('[data-weather-wind]').textContent = wind ? `${wind} km/j` : '-';
+                    widget.hidden = false;
+                })
+                .catch(() => {
+                    widget.hidden = true;
+                });
+        });
     </script>
     @endpush
 </x-user-layout>

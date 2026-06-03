@@ -12,7 +12,7 @@ class UserDashboardController extends Controller
     {
         $bookings = $request->user()->bookings();
 
-        return view('dashboard', [
+        return view('user.dashboard', [
             'summary' => [
                 'total' => (clone $bookings)->count(),
                 'pending' => (clone $bookings)->where('status', 'pending')->count(),

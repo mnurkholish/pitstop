@@ -35,12 +35,15 @@
                         <p class="mt-1 text-xs text-slate-400">Jenis Layanan</p>
                     </div>
                 </div>
-                <div id="jember-weather-widget" hidden class="mt-6 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-900">
-                    <p class="text-xs font-semibold uppercase text-blue-600">Cuaca Jember</p>
-                    <p class="mt-1">
-                        <span data-weather-temp class="font-bold"></span>
-                        <span data-weather-desc class="text-blue-700"></span>
-                    </p>
+                <div id="jember-weather-widget" hidden class="mt-5 max-w-xs rounded-xl border border-blue-100 bg-blue-50 px-3 py-2.5 text-blue-900">
+                    <p class="text-[10px] font-semibold uppercase text-blue-600">Cuaca</p>
+                    <div class="mt-1 flex items-center justify-between gap-3">
+                        <div class="min-w-0">
+                            <p data-weather-city class="truncate text-xs font-semibold text-blue-900">Jember</p>
+                            <p data-weather-desc class="truncate text-[11px] text-blue-700"></p>
+                        </div>
+                        <p data-weather-temp class="shrink-0 text-lg font-bold text-blue-900"></p>
+                    </div>
                 </div>
             </div>
 
@@ -153,15 +156,17 @@
                 })
                 .then((payload) => {
                     const current = payload.current_condition?.[0];
+                    const city = payload.nearest_area?.[0]?.areaName?.[0]?.value || 'Jember';
                     const temperature = current?.temp_C;
                     const description = current?.weatherDesc?.[0]?.value;
 
-                    if (! temperature || ! description) {
+                    if (temperature === undefined || temperature === null || ! description) {
                         return;
                     }
 
+                    widget.querySelector('[data-weather-city]').textContent = city;
                     widget.querySelector('[data-weather-temp]').textContent = `${temperature}°C`;
-                    widget.querySelector('[data-weather-desc]').textContent = `, ${description}`;
+                    widget.querySelector('[data-weather-desc]').textContent = description;
                     widget.hidden = false;
                 })
                 .catch(() => {

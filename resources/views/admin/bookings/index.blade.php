@@ -6,12 +6,6 @@
     })">
         <x-ui.page-header title="Daftar Booking" description="Kelola booking pelanggan." />
 
-        @if (session('success'))
-            <x-ui.alert variant="success" class="mt-5">{{ session('success') }}</x-ui.alert>
-        @endif
-        @if (session('error'))
-            <x-ui.alert variant="danger" class="mt-5">{{ session('error') }}</x-ui.alert>
-        @endif
         @if ($errors->has('cancel_reason'))
             <x-ui.alert variant="danger" class="mt-5">{{ $errors->first('cancel_reason') }}</x-ui.alert>
         @endif
@@ -170,6 +164,7 @@
         </x-ui.modal>
     </div>
 
+    @push('scripts')
     <script>
         function adminBookingList(config) {
             return {
@@ -295,4 +290,5 @@
             };
         }
     </script>
+    @endpush
 </x-admin-layout>

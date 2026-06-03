@@ -202,6 +202,7 @@
         </section>
     </div>
 
+    @push('scripts')
     <script>
         function bookingEstimator(services, selectedIds = [], arrivalTime = '') {
             return {
@@ -237,4 +238,5 @@
             };
         }
     </script>
+    @endpush
 </x-user-layout>

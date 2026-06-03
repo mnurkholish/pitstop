@@ -14,12 +14,6 @@
                 </x-slot>
             </x-ui.page-header>
 
-            @if (session('success'))
-                <x-ui.alert variant="success" class="mt-5">{{ session('success') }}</x-ui.alert>
-            @endif
-            @if (session('error'))
-                <x-ui.alert variant="danger" class="mt-5">{{ session('error') }}</x-ui.alert>
-            @endif
             @if ($errors->has('cancel_reason'))
                 <x-ui.alert variant="danger" class="mt-5">{{ $errors->first('cancel_reason') }}</x-ui.alert>
             @endif
@@ -198,6 +192,7 @@
         </x-ui.modal>
     </div>
 
+    @push('scripts')
     <script>
         function bookingList(config) {
             return {
@@ -311,4 +306,5 @@
             };
         }
     </script>
+    @endpush
 </x-user-layout>

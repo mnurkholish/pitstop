@@ -136,6 +136,7 @@
         </x-ui.modal>
     </div>
 
+    @push('scripts')
     <script>
         function adminBookingHistory(config) {
             return {
@@ -242,4 +243,5 @@
             };
         }
     </script>
+    @endpush
 </x-admin-layout>

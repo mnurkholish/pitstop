@@ -2,10 +2,6 @@
     <div class="pitstop-container py-8 sm:py-10">
         <x-ui.page-header title="Atur Preferensi" description="Sesuaikan tampilan PitStop agar nyaman digunakan." />
 
-        @if (session('success'))
-            <x-ui.alert variant="success" class="mt-5">{{ session('success') }}</x-ui.alert>
-        @endif
-
         <form action="{{ route('preferences.update') }}" method="POST" class="mt-6">
             @csrf
             @method('PATCH')

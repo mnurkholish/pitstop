@@ -26,7 +26,7 @@ Route::get('/dashboard', UserDashboardController::class)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
     Route::get('/services/search', [AdminServiceController::class, 'search'])->name('services.search');
-    Route::resource('/services', AdminServiceController::class);
+    Route::resource('services', AdminServiceController::class);
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/search', [AdminBookingController::class, 'search'])->name('bookings.search');
     Route::get('/bookings/history', [AdminBookingHistoryController::class, 'index'])->name('bookings.history');

@@ -91,6 +91,7 @@
         </x-ui.modal>
     </section>
 
+    @push('scripts')
     <script>
         function publicServiceCatalog(config) {
             return {
@@ -166,4 +167,5 @@
             };
         }
     </script>
+    @endpush
 </x-public-layout>

@@ -35,6 +35,13 @@
                         <p class="mt-1 text-xs text-slate-400">Jenis Layanan</p>
                     </div>
                 </div>
+                <div id="jember-weather-widget" hidden class="mt-6 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-900">
+                    <p class="text-xs font-semibold uppercase text-blue-600">Cuaca Jember</p>
+                    <p class="mt-1">
+                        <span data-weather-temp class="font-bold"></span>
+                        <span data-weather-desc class="text-blue-700"></span>
+                    </p>
+                </div>
             </div>
 
             <div class="relative overflow-hidden rounded-3xl bg-blue-100 p-5 sm:p-8">
@@ -126,4 +133,41 @@
     </section>
 
     <p class="sr-only">Kunjungan beranda dalam sesi ini: {{ $visitCount }}</p>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const widget = document.getElementById('jember-weather-widget');
+
+            if (! widget) {
+                return;
+            }
+
+            fetch('https://wttr.in/Jember?format=j1')
+                .then((response) => {
+                    if (! response.ok) {
+                        throw new Error('Cuaca tidak tersedia');
+                    }
+
+                    return response.json();
+                })
+                .then((payload) => {
+                    const current = payload.current_condition?.[0];
+                    const temperature = current?.temp_C;
+                    const description = current?.weatherDesc?.[0]?.value;
+
+                    if (! temperature || ! description) {
+                        return;
+                    }
+
+                    widget.querySelector('[data-weather-temp]').textContent = `${temperature}°C`;
+                    widget.querySelector('[data-weather-desc]').textContent = `, ${description}`;
+                    widget.hidden = false;
+                })
+                .catch(() => {
+                    widget.hidden = true;
+                });
+        });
+    </script>
+    @endpush
 </x-public-layout>

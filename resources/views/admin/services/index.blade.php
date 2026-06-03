@@ -11,13 +11,6 @@
             </x-slot>
         </x-ui.page-header>
 
-        @if (session('success'))
-            <x-ui.alert variant="success" class="mt-5">{{ session('success') }}</x-ui.alert>
-        @endif
-        @if (session('error'))
-            <x-ui.alert variant="danger" class="mt-5">{{ session('error') }}</x-ui.alert>
-        @endif
-
         <x-ui.card class="mt-6">
             <div class="flex flex-col gap-3 lg:flex-row lg:items-center">
                 <label class="flex-1">
@@ -82,6 +75,7 @@
         </section>
     </div>
 
+    @push('scripts')
     <script>
         function serviceList(config) {
             return {
@@ -129,4 +123,5 @@
             };
         }
     </script>
+    @endpush
 </x-admin-layout>

@@ -41,7 +41,7 @@
                     <span
                         class="mx-auto flex size-12 items-center justify-center rounded-xl bg-blue-600 text-sm font-bold text-white">PS</span>
                     <p class="mt-3 font-semibold text-blue-900">Lokasi PitStop</p>
-                    <p class="mt-1 text-xs text-blue-700">Jl. PitStop No. 88, Jakarta Selatan</p>
+                    <p class="mt-1 text-xs text-blue-700">Jl. Kalimantan, Sumber Sari, Jember</p>
                 </div>
             </div>
         </div>

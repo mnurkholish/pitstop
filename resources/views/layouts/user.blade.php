@@ -7,7 +7,7 @@
 @endisset
 
 @section('navbar')
-    @include('layouts.partials.navbar', ['variant' => 'user'])
+    <x-navbar.user />
 @endsection
 
 @section('page')

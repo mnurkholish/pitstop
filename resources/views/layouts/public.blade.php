@@ -1,7 +1,15 @@
 @extends('layouts.app')
 
 @section('navbar')
-    @include('layouts.partials.navbar', ['variant' => 'public'])
+    @auth
+        @if (auth()->user()->role === 'admin')
+            <x-navbar.admin />
+        @else
+            <x-navbar.user />
+        @endif
+    @else
+        <x-navbar.guest />
+    @endauth
 @endsection
 
 @section('page')

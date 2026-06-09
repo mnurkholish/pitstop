@@ -56,7 +56,7 @@ class PublicPageController extends Controller
         return view('public.contact');
     }
 
-    private function filteredServices(Request $request): Builder
+    private function filteredServices(Request $request)
     {
         $search = trim((string) $request->string('search'));
 

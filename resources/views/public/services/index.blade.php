@@ -19,7 +19,7 @@
                 <label>
                     <span class="sr-only">Cari layanan</span>
                     <input type="search" x-model="search" @input.debounce.350ms="fetchServices"
-                        placeholder="Cari nama layanan atau harga..."
+                        placeholder="Cari nama layanan..."
                         class="block w-full rounded-lg border-slate-300 bg-white text-sm text-slate-700 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500">
                 </label>
             </x-ui.card>

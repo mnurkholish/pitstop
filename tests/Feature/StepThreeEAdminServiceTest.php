@@ -69,12 +69,14 @@ test('admin can search and filter services through json endpoint', function () {
     $this->actingAs($admin)
         ->getJson('/admin/services/search?search=175000')
         ->assertOk()
-        ->assertJsonPath('count', 1);
+        ->assertJsonPath('count', 0)
+        ->assertJsonPath('empty', true);
 
     $this->actingAs($admin)
         ->getJson('/admin/services/search?search=90')
         ->assertOk()
-        ->assertJsonPath('count', 1);
+        ->assertJsonPath('count', 0)
+        ->assertJsonPath('empty', true);
 
     $this->actingAs($admin)
         ->getJson('/admin/services/search?status=inactive')

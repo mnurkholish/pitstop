@@ -63,11 +63,7 @@ class PublicPageController extends Controller
         return Service::query()
             ->where('is_active', true)
             ->when($search !== '', function (Builder $query) use ($search) {
-                $query->where(function (Builder $query) use ($search) {
-                    $query
-                        ->where('name', 'like', "%{$search}%")
-                        ->orWhere('price', 'like', "%{$search}%");
-                });
+                $query->where('name', 'like', "%{$search}%");
             })
             ->orderBy('name');
     }

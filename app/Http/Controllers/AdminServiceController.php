@@ -136,20 +136,7 @@ class AdminServiceController extends Controller
             ->when($status === 'active', fn (Builder $query) => $query->where('is_active', true))
             ->when($status === 'inactive', fn (Builder $query) => $query->where('is_active', false))
             ->when($search !== '', function (Builder $query) use ($search) {
-                $query->where(function (Builder $query) use ($search) {
-                    $query
-                        ->where('name', 'like', "%{$search}%")
-                        ->orWhere('price', 'like', "%{$search}%")
-                        ->orWhere('duration_minutes', 'like', "%{$search}%");
-
-                    if (in_array(strtolower($search), ['aktif', 'active'], true)) {
-                        $query->orWhere('is_active', true);
-                    }
-
-                    if (in_array(strtolower($search), ['nonaktif', 'inactive'], true)) {
-                        $query->orWhere('is_active', false);
-                    }
-                });
+                $query->where('name', 'like', "%{$search}%");
             })
             ->latest();
     }

@@ -136,8 +136,6 @@
         </div>
     </section>
 
-    <p class="sr-only">Kunjungan beranda dalam sesi ini: {{ $visitCount }}</p>
-
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {

@@ -58,10 +58,6 @@ test('guest homepage only displays up to four active services', function () {
         ->assertDontSee('Inactive Service');
 });
 
-test('guest homepage increments its lightweight session visit counter', function () {
-    $this->get('/')->assertSessionHas('home_visit_count', 1);
-    $this->get('/')->assertSessionHas('home_visit_count', 2);
-});
 
 test('public navbar pages are reachable', function (string $path, string $text) {
     $this->get($path)

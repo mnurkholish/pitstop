@@ -10,8 +10,6 @@ class HomeController extends Controller
 {
     public function __invoke(Request $request): View
     {
-        $visitCount = $request->session()->increment('home_visit_count');
-
         return view('public.home', [
             'services' => Service::query()
                 ->where('is_active', true)
@@ -19,7 +17,6 @@ class HomeController extends Controller
                 ->limit(4)
                 ->get(),
             'activeServiceCount' => Service::query()->where('is_active', true)->count(),
-            'visitCount' => $visitCount,
         ]);
     }
 }

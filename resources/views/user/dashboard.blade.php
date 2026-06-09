@@ -37,6 +37,18 @@
                     </x-ui.card>
                 @endforeach
             </div>
+
+            <div id="user-dashboard-weather-widget" hidden class="mt-4 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2.5 text-blue-900">
+                <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0">
+                        <p class="text-[10px] font-semibold uppercase text-blue-600">Cuaca</p>
+                        <p data-weather-city class="mt-0.5 truncate text-xs font-semibold text-blue-900">Jember</p>
+                        <p data-weather-desc class="truncate text-[11px] text-blue-700"></p>
+                    </div>
+                    <p data-weather-temp class="shrink-0 text-lg font-bold text-blue-900"></p>
+                </div>
+                <div data-weather-periods class="mt-2 grid grid-cols-4 gap-1 border-t border-blue-100 pt-2 text-[10px]"></div>
+            </div>
         </section>
 
         <section class="mt-10">
@@ -182,30 +194,6 @@
                         </div>
                     </x-ui.card>
 
-                    <div id="user-dashboard-weather-widget" hidden class="rounded-xl border border-blue-100 bg-blue-50 px-3 py-2.5 text-blue-900">
-                        <div class="flex items-start justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="text-[10px] font-semibold uppercase text-blue-600">Cuaca</p>
-                                <p data-weather-city class="mt-0.5 truncate text-xs font-semibold text-blue-900">Jember</p>
-                                <p data-weather-desc class="truncate text-[11px] text-blue-700"></p>
-                            </div>
-                            <p data-weather-temp class="shrink-0 text-lg font-bold text-blue-900"></p>
-                        </div>
-                        <dl class="mt-2 grid grid-cols-3 gap-1 border-t border-blue-100 pt-2 text-[10px]">
-                            <div>
-                                <dt class="text-blue-500">Terasa</dt>
-                                <dd data-weather-feels class="font-semibold text-blue-900"></dd>
-                            </div>
-                            <div>
-                                <dt class="text-blue-500">Lembap</dt>
-                                <dd data-weather-humidity class="font-semibold text-blue-900"></dd>
-                            </div>
-                            <div>
-                                <dt class="text-blue-500">Angin</dt>
-                                <dd data-weather-wind class="font-semibold text-blue-900"></dd>
-                            </div>
-                        </dl>
-                    </div>
                 </aside>
             </form>
         </section>
@@ -270,7 +258,43 @@
                 return;
             }
 
-            fetch('https://wttr.in/Jember?format=j1')
+            const weatherCodeLabels = {
+                0: 'Cerah',
+                1: 'Cerah',
+                2: 'Berawan',
+                3: 'Mendung',
+                45: 'Berkabut',
+                48: 'Berkabut',
+                51: 'Gerimis',
+                53: 'Gerimis',
+                55: 'Gerimis',
+                61: 'Hujan',
+                63: 'Hujan',
+                65: 'Hujan deras',
+                80: 'Hujan lokal',
+                81: 'Hujan lokal',
+                82: 'Hujan deras',
+                95: 'Badai',
+                96: 'Badai',
+                99: 'Badai',
+            };
+            const periods = [
+                ['Pagi', '06'],
+                ['Siang', '12'],
+                ['Sore', '15'],
+                ['Malam', '19'],
+            ];
+            const url = new URL('https://api.open-meteo.com/v1/forecast');
+            url.search = new URLSearchParams({
+                latitude: '-8.1724',
+                longitude: '113.7006',
+                timezone: 'Asia/Jakarta',
+                forecast_days: '1',
+                current: 'temperature_2m,weather_code',
+                hourly: 'temperature_2m,weather_code',
+            }).toString();
+
+            fetch(url)
                 .then((response) => {
                     if (! response.ok) {
                         throw new Error('Cuaca tidak tersedia');
@@ -279,24 +303,33 @@
                     return response.json();
                 })
                 .then((payload) => {
-                    const current = payload.current_condition?.[0];
-                    const city = payload.nearest_area?.[0]?.areaName?.[0]?.value || 'Jember';
-                    const temperature = current?.temp_C;
-                    const description = current?.weatherDesc?.[0]?.value;
-                    const feelsLike = current?.FeelsLikeC;
-                    const humidity = current?.humidity;
-                    const wind = current?.windspeedKmph;
+                    const current = payload.current;
+                    const city = 'Jember';
+                    const temperature = current?.temperature_2m;
+                    const description = weatherCodeLabels[current?.weather_code] || 'Cuaca terkini';
 
                     if (temperature === undefined || temperature === null || ! description) {
                         return;
                     }
 
                     widget.querySelector('[data-weather-city]').textContent = city;
-                    widget.querySelector('[data-weather-temp]').textContent = `${temperature}°C`;
+                    widget.querySelector('[data-weather-temp]').textContent = `${Math.round(temperature)}°C`;
                     widget.querySelector('[data-weather-desc]').textContent = description;
-                    widget.querySelector('[data-weather-feels]').textContent = feelsLike ? `${feelsLike}°C` : '-';
-                    widget.querySelector('[data-weather-humidity]').textContent = humidity ? `${humidity}%` : '-';
-                    widget.querySelector('[data-weather-wind]').textContent = wind ? `${wind} km/j` : '-';
+
+                    const day = (current?.time || payload.hourly?.time?.[0] || '').slice(0, 10);
+                    widget.querySelector('[data-weather-periods]').innerHTML = periods.map(([label, hour]) => {
+                        const index = payload.hourly?.time?.findIndex((time) => time === `${day}T${hour}:00`);
+                        const periodTemp = index >= 0 ? payload.hourly.temperature_2m[index] : null;
+                        const periodCode = index >= 0 ? payload.hourly.weather_code[index] : null;
+
+                        return `
+                            <div>
+                                <p class="text-blue-500">${label}</p>
+                                <p class="font-semibold text-blue-900">${periodTemp === null ? '-' : `${Math.round(periodTemp)}°C`}</p>
+                                <p class="truncate text-blue-700">${weatherCodeLabels[periodCode] || '-'}</p>
+                            </div>
+                        `;
+                    }).join('');
                     widget.hidden = false;
                 })
                 .catch(() => {

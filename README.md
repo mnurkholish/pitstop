@@ -1,222 +1,267 @@
-# PitStop - Sistem Booking Service Bengkel
+# PitStop
 
-PitStop adalah aplikasi web Laravel untuk booking service kendaraan dan pengelolaan operasional bengkel. Pelanggan dapat membuat booking dari dashboard, memantau status booking, dan membatalkan booking yang masih menunggu. Admin dapat mengelola layanan, memproses booking aktif, serta melihat riwayat booking final.
+![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Alpine.js](https://img.shields.io/badge/Alpine.js-3-8BC0D0?style=for-the-badge&logo=alpinedotjs&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-Ready-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+
+Sistem booking service bengkel berbasis web. PitStop membantu pelanggan membuat jadwal service dengan mudah, sementara admin dapat mengelola layanan, memproses booking, dan melihat riwayat pekerjaan bengkel.
+
+> Cocok untuk demo aplikasi bengkel, tugas akhir, latihan Laravel, atau dasar pengembangan sistem booking service yang lebih lengkap.
+
+## Navigasi
+
+- [Tentang Project](#tentang-project)
+- [Preview Singkat](#preview-singkat)
+- [Fitur](#fitur)
+- [Batasan](#batasan)
+- [Tech Stack](#tech-stack)
+- [Persyaratan](#persyaratan)
+- [Instalasi](#instalasi)
+- [Akun Default / Demo](#akun-default--demo)
+- [Struktur Database](#struktur-database)
+- [Halaman Utama](#halaman-utama)
+- [Penutup](#penutup)
+
+## Tentang Project
+
+PitStop dibuat untuk menyederhanakan proses booking service kendaraan. Pelanggan dapat memilih layanan, menentukan tanggal dan jam kedatangan, lalu melihat estimasi biaya serta durasi sebelum booking dikirim.
+
+Admin memiliki halaman khusus untuk mengatur layanan bengkel, melihat booking aktif, memperbarui status pengerjaan, dan memeriksa riwayat booking yang sudah selesai atau dibatalkan.
+
+## Preview Singkat
+
+| Area | Yang Bisa Dilakukan |
+| --- | --- |
+| Pelanggan | Booking service, cek status, lihat detail, batalkan booking menunggu. |
+| Admin | Kelola layanan, proses booking, lihat riwayat, pantau ringkasan data. |
+| Sistem | Cek jadwal, hitung estimasi, pisahkan akses admin dan pelanggan. |
+
+Alur sederhana:
+
+```text
+Pelanggan pilih layanan
+  -> sistem hitung estimasi
+  -> booking dibuat
+  -> admin memproses
+  -> booking selesai / dibatalkan
+```
+
+## Fitur
+
+### Untuk Pelanggan
+
+- Registrasi, login, logout, dan pengaturan profil.
+- Membuat booking service kendaraan.
+- Memilih layanan aktif yang tersedia.
+- Melihat estimasi harga, durasi, dan jam selesai.
+- Melihat daftar booking pribadi.
+- Mencari dan memfilter booking berdasarkan status.
+- Membuka detail booking.
+- Membatalkan booking yang masih berstatus menunggu.
+- Mengatur tema tampilan dan ukuran font.
+
+### Untuk Admin
+
+- Dashboard ringkasan layanan dan booking.
+- Mengelola data layanan bengkel.
+- Menambahkan gambar layanan.
+- Mengaktifkan atau menonaktifkan layanan.
+- Melihat booking aktif.
+- Memproses status booking.
+- Melihat riwayat booking selesai dan dibatalkan.
+- Mencari dan memfilter data booking.
+
+### Sistem
+
+- Role admin dan pelanggan dipisahkan.
+- Jadwal booking dibatasi sesuai jam operasional bengkel.
+- Slot booking dicek agar tidak bertabrakan.
+- Tampilan responsive untuk desktop dan mobile.
+- Data contoh tersedia melalui seeder.
+
+## Status Project
+
+| Bagian | Status |
+| --- | --- |
+| Autentikasi | Tersedia |
+| Booking pelanggan | Tersedia |
+| Manajemen layanan | Tersedia |
+| Riwayat booking | Tersedia |
+| Preferensi tampilan | Tersedia |
+| Pembayaran online | Belum tersedia |
+| Notifikasi otomatis | Belum tersedia |
+
+## Batasan
+
+Beberapa fitur berikut belum tersedia di versi ini:
+
+- Pembayaran online.
+- Integrasi WhatsApp atau notifikasi otomatis.
+- Inventory sparepart.
+- Laporan keuangan.
+- Multi-cabang bengkel.
+- Verifikasi email wajib sebelum booking.
+- Pembatalan booking setelah status diproses.
 
 ## Tech Stack
 
-- PHP 8.3+ dan Laravel 13
-- Laravel Breeze Blade
-- Blade, Tailwind CSS, dan Alpine.js
-- Vite
-- SQLite
-- Pest PHP
+| Bagian | Teknologi |
+| --- | --- |
+| Backend | PHP 8.3+, Laravel 13 |
+| Autentikasi | Laravel Breeze |
+| Frontend | Blade, Tailwind CSS, Alpine.js |
+| Build Tool | Vite |
+| Database | MySQL / MariaDB |
 
-## Fitur Utama
+## Persyaratan
 
-- Autentikasi berbasis session: register, login, logout, reset password, edit profil, dan soft delete akun.
-- Upload avatar profil opsional dengan fallback inisial pada navbar.
-- Role `user` dan `admin` dengan navbar serta halaman yang berbeda.
-- Dashboard pelanggan dengan form booking dan estimasi harga, durasi, serta jam selesai.
-- Validasi konflik slot dan rentang waktu pada jam operasional `08:00-17:00 WIB`.
-- Booking Saya dengan pencarian AJAX, filter status, detail modal, dan pembatalan booking `pending`.
-- Dashboard admin dengan statistik layanan dan booking.
-- CRUD layanan admin dengan pencarian AJAX, pagination, gambar layanan, dan fallback logo PitStop.
-- Daftar booking aktif admin, riwayat booking final, detail modal, filter tanggal, serta pencarian AJAX.
-- Transisi status admin: `pending -> diproses/dibatalkan` dan `diproses -> selesai/dibatalkan`.
-- Preferensi tema dan ukuran font berbasis cookie.
-- Session visit counter ringan pada halaman beranda.
-- Layout responsive: navbar hamburger mobile, tabel desktop, dan card list mobile.
+Pastikan perangkat sudah memiliki:
+
+| Kebutuhan | Keterangan |
+| --- | --- |
+| PHP | Versi 8.3 atau lebih baru |
+| Composer | Untuk dependency Laravel |
+| Node.js dan npm | Untuk asset frontend |
+| MySQL / MariaDB | Untuk database |
+| Git | Untuk clone repository |
 
 ## Instalasi
+
+Ikuti langkah berikut untuk menjalankan PitStop di lokal.
+
+### 1. Clone Project
+
+```bash
+git clone <url-repository>
+cd <nama-folder-project>
+```
+
+### 2. Install Dependency
 
 ```bash
 composer install
 npm install
+```
+
+### 3. Siapkan Environment
+
+```bash
 copy .env.example .env
 php artisan key:generate
 ```
 
-Buat file database SQLite jika belum tersedia:
+### 4. Atur Database
 
-```powershell
-New-Item database/database.sqlite -ItemType File -Force
+Buat database baru, misalnya dengan nama `pitstop`, lalu sesuaikan file `.env`.
+
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=pitstop
+DB_USERNAME=root
+DB_PASSWORD=
+APP_TIMEZONE=Asia/Jakarta
 ```
 
-Jalankan migration, seeder, storage link, dan build:
+### 5. Jalankan Migration dan Seeder
 
 ```bash
 php artisan migrate --seed
 php artisan storage:link
-npm run build
 ```
 
-Untuk development:
+### 6. Jalankan Aplikasi
+
+Buka dua terminal.
+
+Terminal pertama:
 
 ```bash
 php artisan serve
+```
+
+Terminal kedua:
+
+```bash
 npm run dev
 ```
 
-Database tetap menggunakan SQLite:
+Biasanya aplikasi dapat dibuka di:
 
-```dotenv
-DB_CONNECTION=sqlite
-APP_TIMEZONE=Asia/Jakarta
+```text
+http://127.0.0.1:8000
 ```
 
-Secara default Laravel akan menggunakan `database/database.sqlite`.
+Untuk build asset production:
 
-## Akun Demo
+```bash
+npm run build
+```
+
+## Akun Default / Demo
+
+Gunakan akun berikut setelah menjalankan seeder.
 
 | Role | Email | Password |
 | --- | --- | --- |
 | Admin | `admin@example.com` | `password` |
-| User | `user@example.com` | `password` |
+| Pelanggan | `user@example.com` | `password` |
 
-Seeder juga menambahkan layanan dan booking dummy:
+Seeder juga menambahkan data contoh seperti layanan bengkel dan booking dummy agar aplikasi langsung memiliki isi saat dibuka.
 
-```bash
-php artisan db:seed
+## Struktur Database
+
+Tabel utama yang digunakan:
+
+| Tabel | Fungsi |
+| --- | --- |
+| `users` | Menyimpan akun admin dan pelanggan. |
+| `services` | Menyimpan layanan bengkel, harga, durasi, gambar, dan status aktif. |
+| `bookings` | Menyimpan data booking, kendaraan, jadwal, slot, total biaya, status, dan catatan. |
+| `booking_service` | Menghubungkan booking dengan layanan yang dipilih. |
+
+Relasi sederhananya:
+
+```text
+users
+  -> bookings
+
+bookings
+  -> booking_service
+
+services
+  -> booking_service
 ```
 
-## Route Utama
+Penjelasan singkat:
 
-| Method | Route | Akses | Keterangan |
-| --- | --- | --- | --- |
-| `GET` | `/` | Guest | Beranda publik |
-| `GET` | `/services` | Publik | Placeholder katalog layanan |
-| `GET` | `/about` | Publik | Placeholder tentang PitStop |
-| `GET` | `/contact` | Publik | Placeholder kontak |
-| `GET` | `/dashboard` | User | Dashboard dan form booking pelanggan |
-| `GET` | `/my-bookings` | User | Booking Saya |
-| `POST` | `/my-bookings` | User | Simpan booking |
-| `PATCH` | `/my-bookings/{booking}/cancel` | User pemilik | Batalkan booking `pending` |
-| `GET` | `/profile` | User/Admin | Profil Breeze sesuai role |
-| `GET` | `/preferences` | User/Admin | Atur preferensi tampilan |
-| `GET` | `/admin/dashboard` | Admin | Dashboard admin |
-| `GET` | `/admin/services` | Admin | Kelola layanan |
-| `GET` | `/admin/bookings` | Admin | Booking aktif |
-| `GET` | `/admin/bookings/history` | Admin | Riwayat booking final |
-| `PATCH` | `/admin/bookings/{booking}/status` | Admin | Ubah status booking |
+- Satu pelanggan bisa memiliki banyak booking.
+- Satu booking bisa berisi lebih dari satu layanan.
+- Satu layanan bisa dipilih di banyak booking.
+- Harga dan durasi layanan disimpan sebagai snapshot agar riwayat booking tetap akurat.
 
-Endpoint pencarian JSON:
+## Halaman Utama
 
-- `GET /my-bookings/search`
-- `GET /admin/services/search`
-- `GET /admin/bookings/search`
-- `GET /admin/bookings/history/search`
+| Halaman | Keterangan |
+| --- | --- |
+| `/` | Beranda publik. |
+| `/services` | Daftar layanan publik. |
+| `/login` | Login pengguna. |
+| `/register` | Registrasi pelanggan. |
+| `/dashboard` | Dashboard pelanggan dan form booking. |
+| `/my-bookings` | Daftar booking pelanggan. |
+| `/preferences` | Pengaturan tema dan ukuran font. |
+| `/profile` | Pengaturan profil akun. |
+| `/admin/dashboard` | Dashboard admin. |
+| `/admin/services` | Kelola layanan bengkel. |
+| `/admin/bookings` | Kelola booking aktif. |
+| `/admin/bookings/history` | Riwayat booking selesai atau dibatalkan. |
 
-## Role Access
+## Penutup
 
-- Guest dapat membuka beranda, halaman publik, login, dan register.
-- User dapat membuka dashboard pelanggan, Booking Saya, profil, dan preferensi.
-- Admin dapat membuka dashboard admin, CRUD layanan, daftar booking aktif, riwayat booking, profil, dan preferensi.
-- Route user dan admin dipisahkan dengan middleware `auth` dan `role`.
-- Registrasi publik selalu membuat role `user`.
-- Akun yang dihapus menggunakan soft delete dan tidak dapat login kembali.
+PitStop dibuat sebagai sistem booking service bengkel yang sederhana, rapi, dan mudah dikembangkan. Fitur utamanya sudah mencakup kebutuhan dasar pelanggan dan admin, mulai dari booking layanan sampai pengelolaan riwayat service.
 
-## CRUD Layanan
-
-Admin dapat menambah, melihat detail, mengedit, mencari, memfilter, dan menghapus layanan. Hanya layanan aktif yang muncul pada form booking pelanggan.
-
-Upload gambar bersifat opsional dan dibatasi ke JPG, JPEG, atau PNG maksimal 2 MB. File disimpan pada disk `public` di folder `services`. Gambar lama dihapus setelah upload pengganti valid berhasil tersimpan. Layanan yang pernah dipakai booking tidak dapat dihapus permanen; admin perlu menonaktifkannya.
-
-## Booking Flow
-
-1. User login lalu mengisi form booking pada `/dashboard`.
-2. User memilih kendaraan, tanggal, jam kedatangan, slot A/B/C, dan minimal satu layanan aktif.
-3. JavaScript menghitung estimasi harga, durasi, dan jam selesai.
-4. Server memvalidasi request, menghitung ulang total dari database, memastikan jam operasional, dan menolak konflik booking aktif.
-5. Booking disimpan dengan kode `PS-0001`, status `pending`, dan snapshot harga/durasi layanan.
-6. User memantau booking melalui `/my-bookings`.
-7. Admin memproses booking aktif. Booking `selesai` atau `dibatalkan` berpindah ke riwayat.
-
-## AJAX dan JSON
-
-Pencarian Booking Saya, layanan admin, daftar booking admin, dan riwayat admin memakai Fetch API. Endpoint mengembalikan JSON berisi hasil render desktop dan mobile. UI menyediakan loading, empty, dan error state tanpa reload halaman penuh.
-
-## Cookie dan Session
-
-- Laravel Breeze memakai session untuk autentikasi dan logout menginvalidasi session aktif.
-- Beranda mencatat jumlah kunjungan selama session berjalan.
-- Cookie `pitstop_theme` menyimpan tema `light` atau `dark`.
-- Cookie `pitstop_font_size` menyimpan ukuran font `normal` atau `large`.
-
-## ERD Sederhana
-
-```mermaid
-erDiagram
-    USERS ||--o{ BOOKINGS : owns
-    BOOKINGS ||--o{ BOOKING_SERVICE : contains
-    SERVICES ||--o{ BOOKING_SERVICE : selected_in
-
-    USERS {
-        bigint id PK
-        string name
-        string email UK
-        string password
-        string role
-        datetime deleted_at
-    }
-
-    SERVICES {
-        bigint id PK
-        string name
-        text description
-        integer price
-        integer duration_minutes
-        string image
-        boolean is_active
-    }
-
-    BOOKINGS {
-        bigint id PK
-        string booking_code UK
-        bigint user_id FK
-        string slot
-        datetime start_time
-        datetime end_time
-        integer total_price
-        integer total_duration_minutes
-        string status
-    }
-
-    BOOKING_SERVICE {
-        bigint id PK
-        bigint booking_id FK
-        bigint service_id FK
-        integer price_snapshot
-        integer duration_snapshot
-    }
-```
-
-Relasi penting:
-
-- `users -> bookings`: restrict delete. User dihapus menggunakan soft delete agar histori booking tetap tersedia.
-- `bookings -> booking_service`: cascade delete.
-- `services -> booking_service`: restrict delete.
-
-## Validasi
-
-- Booking divalidasi di browser dan server. Server menghitung ulang harga, durasi, dan waktu selesai dari database.
-- Layanan divalidasi di browser melalui input HTML dan selalu divalidasi ulang di server.
-- Upload gambar dibatasi tipe dan ukuran file di server.
-- Pembatalan user serta perubahan status admin divalidasi ulang di server.
-
-## Pengujian
-
-```bash
-npm run build
-php artisan test
-git diff --check
-```
-
-## Batasan Sistem
-
-- SQLite digunakan sebagai database proyek saat ini.
-- Verifikasi email belum diwajibkan untuk booking sesuai keputusan implementasi.
-- Avatar dapat diunggah dari profil dengan fallback inisial jika foto belum tersedia.
-- `/services`, `/about`, dan `/contact` masih berupa placeholder sederhana. Beranda sudah menampilkan ringkasan layanan aktif.
-- Belum ada pembayaran online, WhatsApp, inventory sparepart, laporan keuangan, atau multi-cabang.
-
-Hasil audit implementasi tersedia di [`docs/AUDIT-FINAL.md`](docs/AUDIT-FINAL.md).
+Terima kasih sudah melihat dan menggunakan project PitStop.

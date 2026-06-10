@@ -294,6 +294,7 @@
                 hourly: 'temperature_2m,weather_code',
             }).toString();
 
+            // Ambil prakiraan cuaca Jember
             fetch(url)
                 .then((response) => {
                     if (! response.ok) {

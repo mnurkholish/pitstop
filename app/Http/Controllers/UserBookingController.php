@@ -36,6 +36,7 @@ class UserBookingController extends Controller
         $validated = $request->validated();
 
         try {
+            // Cegah dua booking memakai slot yang sama bersamaan
             $booking = Cache::lock("booking-slot:{$validated['slot']}", 10)->block(
                 5,
                 fn () => DB::transaction(fn () => $this->createBooking($request, $validated)),
@@ -65,6 +66,7 @@ class UserBookingController extends Controller
 
     public function show(Request $request, Booking $booking): JsonResponse
     {
+        // Pastikan user hanya melihat datanya sendiri
         abort_unless($booking->user_id === $request->user()->id, 404);
 
         $booking->load('services');
@@ -101,6 +103,7 @@ class UserBookingController extends Controller
             'cancel_reason' => ['required', 'string', 'min:3', 'max:255'],
         ]);
 
+        // Batalkan hanya jika booking masih milik user dan pending
         $cancelledBooking = DB::transaction(function () use ($request, $booking, $validated) {
             $ownedBooking = $request->user()
                 ->bookings()
@@ -171,6 +174,7 @@ class UserBookingController extends Controller
         $totalDuration = $services->sum('duration_minutes');
         $endTime = $startTime->copy()->addMinutes($totalDuration);
 
+        // Pastikan jadwal masuk jam operasional dan tidak bentrok
         $this->ensureWithinOperatingHours($startTime, $endTime);
 
         if (Booking::query()->conflicting($validated['slot'], $startTime, $endTime)->exists()) {

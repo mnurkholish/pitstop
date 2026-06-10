@@ -52,6 +52,7 @@ class AdminServiceController extends Controller
             $validated['image'] = $image;
         }
 
+        // Bersihkan gambar baru jika penyimpanan layanan gagal
         try {
             Service::create($validated);
         } catch (Throwable $exception) {
@@ -87,6 +88,7 @@ class AdminServiceController extends Controller
             unset($validated['image']);
         }
 
+        // Bersihkan gambar baru jika update layanan gagal
         try {
             $service->update($validated);
         } catch (Throwable $exception) {
@@ -143,6 +145,7 @@ class AdminServiceController extends Controller
 
     private function deleteImage(?string $image): void
     {
+        // Jangan hapus gambar bawaan dari folder public images
         if ($image && ! Str::startsWith($image, 'images/')) {
             Storage::disk('public')->delete($image);
         }

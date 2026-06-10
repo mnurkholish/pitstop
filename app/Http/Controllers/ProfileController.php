@@ -39,6 +39,7 @@ class ProfileController extends Controller
             unset($validated['avatar']);
         }
 
+        // Bersihkan avatar baru jika update profil gagal
         try {
             $user->fill($validated);
 

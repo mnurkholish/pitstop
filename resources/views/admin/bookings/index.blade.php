@@ -24,6 +24,7 @@
         </div>
 
         <x-ui.card class="mt-6">
+            {{-- Filter booking aktif --}}
             <div class="grid gap-3 lg:grid-cols-[minmax(0,1fr)_12rem] lg:items-center">
                 <label>
                     <span class="sr-only">Cari booking aktif</span>
@@ -85,6 +86,7 @@
             </div>
         </section>
 
+        {{-- Modal detail booking --}}
         <x-ui.modal name="admin-booking-detail" title="Detail Booking" max-width="lg">
             <template x-if="detailLoading">
                 <p class="text-sm text-slate-500">Memuat detail booking...</p>
@@ -137,6 +139,7 @@
             </template>
         </x-ui.modal>
 
+        {{-- Modal pembatalan booking --}}
         <x-ui.modal name="admin-cancel-booking" title="Batalkan Booking" max-width="md">
             <form :action="statusAction" method="POST">
                 @csrf
@@ -183,6 +186,7 @@
                 statusBookingId: null,
                 statusBookingCode: '',
                 async fetchBookings() {
+                    // Ambil ulang booking sesuai filter
                     this.loading = true;
                     this.error = false;
 
@@ -214,6 +218,7 @@
                     }
                 },
                 handleListClick(event) {
+                    // Delegasi tombol dari hasil render AJAX
                     const button = event.target.closest('[data-booking-action]');
 
                     if (!button) {

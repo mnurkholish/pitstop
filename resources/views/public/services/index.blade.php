@@ -14,6 +14,7 @@
         searchUrl: @js(route('services.search')),
         detailUrl: @js(route('services.show', ['service' => '__SERVICE__'])),
     })">
+        {{-- Katalog layanan publik --}}
         <div class="pitstop-container">
             <x-ui.card>
                 <label>
@@ -49,6 +50,7 @@
             </div>
         </div>
 
+        {{-- Modal detail layanan --}}
         <x-ui.modal name="public-service-detail" title="Detail Layanan" max-width="lg">
             <template x-if="detailLoading">
                 <p class="text-sm text-slate-500">Memuat detail layanan...</p>
@@ -105,6 +107,7 @@
                 detailLoading: false,
                 detailError: false,
                 async fetchServices() {
+                    // Ambil ulang layanan sesuai pencarian
                     this.loading = true;
                     this.error = false;
 
@@ -133,6 +136,7 @@
                     }
                 },
                 handleCatalogClick(event) {
+                    // Delegasi tombol detail dari hasil render AJAX
                     const button = event.target.closest('[data-service-action="detail"]');
 
                     if (button) {

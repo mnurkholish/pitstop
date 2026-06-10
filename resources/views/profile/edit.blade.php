@@ -15,6 +15,7 @@
         </x-ui.card>
 
         <div class="mt-6 space-y-6">
+            {{-- Form profil dan keamanan --}}
             <x-ui.card>
                 <div class="max-w-xl">
                     @include('profile.partials.update-profile-information-form')

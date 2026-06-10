@@ -37,6 +37,7 @@
         </section>
 
         <section class="mt-8">
+            {{-- Filter booking user --}}
             <x-ui.card>
                 <div class="flex flex-col gap-3 lg:flex-row lg:items-center">
                     <label class="relative flex-1">
@@ -110,6 +111,7 @@
             </div>
         </section>
 
+        {{-- Modal detail booking --}}
         <x-ui.modal name="booking-detail" title="Detail Booking" max-width="lg">
             <template x-if="detailLoading">
                 <p class="text-sm text-slate-500">Memuat detail booking...</p>
@@ -160,6 +162,7 @@
             </template>
         </x-ui.modal>
 
+        {{-- Modal pembatalan booking --}}
         <x-ui.modal name="cancel-booking" title="Batalkan Booking" max-width="md">
             <form :action="cancelAction" method="POST">
                 @csrf
@@ -210,6 +213,7 @@
                 cancelBookingId: null,
                 cancelBookingCode: '',
                 async fetchBookings() {
+                    // Ambil ulang booking sesuai filter
                     this.loading = true;
                     this.error = false;
 
@@ -235,6 +239,7 @@
                     }
                 },
                 async openDetail(bookingId) {
+                    // Ambil detail saat modal dibuka
                     this.detail = null;
                     this.detailError = false;
                     this.detailLoading = true;
@@ -257,6 +262,7 @@
                     }
                 },
                 handleListClick(event) {
+                    // Delegasi tombol dari hasil render AJAX
                     const button = event.target.closest('[data-booking-action]');
 
                     if (! button) {

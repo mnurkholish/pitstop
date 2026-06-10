@@ -1,4 +1,5 @@
 @php
+    // Preferensi tampilan global
     $theme = in_array(request()->cookie('pitstop_theme'), ['light', 'dark'], true) ? request()->cookie('pitstop_theme') : 'light';
     $fontSize = in_array(request()->cookie('pitstop_font_size'), ['normal', 'large'], true) ? request()->cookie('pitstop_font_size') : 'normal';
     $pageTitle = trim($__env->yieldContent('title')) ?: ($title ?? config('app.name', 'PitStop'));

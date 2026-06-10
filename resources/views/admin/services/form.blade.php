@@ -19,6 +19,7 @@
     <x-form.error name="description" />
 </div>
 <div class="mt-5">
+    {{-- Gambar layanan opsional --}}
     <label for="image" class="mb-1.5 block text-sm font-medium text-slate-700">Gambar Layanan</label>
     @if ($service?->image)
         <x-ui.service-image :service="$service" size="thumbnail" class="mb-3" />

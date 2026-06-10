@@ -10,6 +10,7 @@ class UserDashboardController extends Controller
 {
     public function __invoke(Request $request): View
     {
+        // Batasi ringkasan ke booking user login
         $bookings = $request->user()->bookings();
 
         return view('user.dashboard', [

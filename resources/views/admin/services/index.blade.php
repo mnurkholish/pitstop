@@ -12,6 +12,7 @@
         </x-ui.page-header>
 
         <x-ui.card class="mt-6">
+            {{-- Filter layanan --}}
             <div class="flex flex-col gap-3 lg:flex-row lg:items-center">
                 <label class="flex-1">
                     <span class="sr-only">Cari layanan</span>
@@ -89,6 +90,7 @@
                 paginationHtml: @js(view('admin.services.partials.pagination', ['services' => $services])->render()),
                 emptyHtml: @js(view('admin.services.partials.empty')->render()),
                 async fetchServices(pageUrl = config.searchUrl) {
+                    // Ambil ulang layanan tanpa reload halaman
                     this.loading = true;
                     this.error = false;
 

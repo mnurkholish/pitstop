@@ -31,6 +31,7 @@ class PublicPageController extends Controller
 
     public function showService(Service $service): JsonResponse
     {
+        // Detail publik hanya untuk layanan aktif
         abort_unless($service->is_active, 404);
 
         return response()->json([

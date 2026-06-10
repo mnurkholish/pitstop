@@ -32,6 +32,7 @@ class AdminBookingHistoryController extends Controller
 
     public function show(Booking $booking): JsonResponse
     {
+        // Riwayat hanya berisi booking final
         abort_unless(in_array($booking->status, ['selesai', 'dibatalkan'], true), 404);
 
         $booking->load('services');

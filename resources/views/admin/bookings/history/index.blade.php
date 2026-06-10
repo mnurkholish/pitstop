@@ -19,6 +19,7 @@
         </div>
 
         <x-ui.card class="mt-6">
+            {{-- Filter riwayat booking --}}
             <div class="grid gap-3 lg:grid-cols-[minmax(0,1fr)_12rem] lg:items-center">
                 <label>
                     <span class="sr-only">Cari riwayat booking</span>
@@ -83,6 +84,7 @@
             </div>
         </section>
 
+        {{-- Modal detail riwayat --}}
         <x-ui.modal name="admin-booking-history-detail" title="Detail Riwayat Booking" max-width="lg">
             <template x-if="detailLoading">
                 <p class="text-sm text-slate-500">Memuat detail riwayat booking...</p>
@@ -153,6 +155,7 @@
                 detailLoading: false,
                 detailError: false,
                 async fetchBookings() {
+                    // Ambil ulang riwayat sesuai filter
                     this.loading = true;
                     this.error = false;
 
@@ -184,6 +187,7 @@
                     }
                 },
                 handleListClick(event) {
+                    // Delegasi tombol dari hasil render AJAX
                     const button = event.target.closest('[data-booking-action="detail"]');
 
                     if (button) {

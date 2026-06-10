@@ -10,6 +10,7 @@
             </div>
 
             <div class="mt-7 grid grid-cols-2 gap-3 lg:grid-cols-4">
+                {{-- Ringkasan statistik --}}
                 @foreach ([['services-total', 'Total Layanan', $summary['services_total'], 'bg-blue-100 text-blue-700'], ['services-active', 'Layanan Aktif', $summary['services_active'], 'bg-emerald-100 text-emerald-700'], ['services-inactive', 'Layanan Nonaktif', $summary['services_inactive'], 'bg-slate-100 text-slate-600'], ['bookings-total', 'Total Booking', $summary['bookings_total'], 'bg-blue-100 text-blue-700'], ['bookings-pending', 'Booking Menunggu', $summary['bookings_pending'], 'bg-amber-100 text-amber-700'], ['bookings-processing', 'Booking Diproses', $summary['bookings_processing'], 'bg-blue-100 text-blue-700'], ['bookings-completed', 'Booking Selesai', $summary['bookings_completed'], 'bg-emerald-100 text-emerald-700'], ['bookings-cancelled', 'Booking Dibatalkan', $summary['bookings_cancelled'], 'bg-red-100 text-red-700']] as [$key, $label, $value, $color])
                     <x-ui.card class="flex items-center gap-3 p-4" data-testid="admin-stat-{{ $key }}"
                         data-value="{{ $value }}">

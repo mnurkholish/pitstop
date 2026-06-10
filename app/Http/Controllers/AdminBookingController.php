@@ -78,6 +78,7 @@ class AdminBookingController extends Controller
             ],
         ]);
 
+        // Kunci booking saat status diperbarui
         $result = DB::transaction(function () use ($booking, $validated) {
             $lockedBooking = Booking::query()
                 ->whereKey($booking->id)
@@ -147,6 +148,7 @@ class AdminBookingController extends Controller
 
     private function canTransition(string $currentStatus, string $nextStatus): bool
     {
+        // Atur alur status booking yang diizinkan
         return in_array($nextStatus, match ($currentStatus) {
             'pending' => ['diproses', 'dibatalkan'],
             'diproses' => ['selesai', 'dibatalkan'],

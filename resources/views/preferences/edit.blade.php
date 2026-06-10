@@ -147,17 +147,14 @@
 
                 applyPreferences(theme, fontSize);
 
-                form.addEventListener('submit', (event) => {
-                    event.preventDefault();
-
+                form.addEventListener('change', () => {
                     const formData = new FormData(form);
                     const theme = formData.get('theme');
                     const fontSize = formData.get('font_size');
 
-                    setCookie('pitstop_theme', theme);
-                    setCookie('pitstop_font_size', fontSize);
-                    applyPreferences(theme, fontSize);
-                    showSuccess('Preferensi tampilan berhasil disimpan.');
+                    if (theme && fontSize) {
+                        applyPreferences(theme, fontSize);
+                    }
                 });
 
                 resetButton?.addEventListener('click', () => {

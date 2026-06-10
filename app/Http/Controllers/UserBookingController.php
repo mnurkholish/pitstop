@@ -66,10 +66,16 @@ class UserBookingController extends Controller
 
     public function show(Request $request, Booking $booking): JsonResponse
     {
-        // Pastikan user hanya melihat datanya sendiri
-        abort_unless($booking->user_id === $request->user()->id, 404);
+        // Pastikan user hanya melihat datanya sendiri.
+        $booking = $request->user()
+            ->bookings()
+            ->whereKey($booking->id)
+            ->with('services')
+            ->first();
 
-        $booking->load('services');
+        if (! $booking) {
+            return response()->json(['message' => 'Booking tidak ditemukan.'], 404);
+        }
 
         return response()->json([
             'booking' => [

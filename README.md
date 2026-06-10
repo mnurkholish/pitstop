@@ -8,21 +8,38 @@
 
 Sistem booking service bengkel berbasis web. PitStop membantu pelanggan membuat jadwal service dengan mudah, sementara admin dapat mengelola layanan, memproses booking, dan melihat riwayat pekerjaan bengkel.
 
-> Cocok untuk demo aplikasi bengkel, tugas akhir, latihan Laravel, atau dasar pengembangan sistem booking service yang lebih lengkap.
-
 ## Navigasi
 
-- [Tentang Project](#tentang-project)
-- [Preview Singkat](#preview-singkat)
-- [Fitur](#fitur)
-- [Batasan](#batasan)
-- [Tech Stack](#tech-stack)
-- [Persyaratan](#persyaratan)
-- [Instalasi](#instalasi)
-- [Akun Default / Demo](#akun-default--demo)
-- [Struktur Database](#struktur-database)
-- [Halaman Utama](#halaman-utama)
-- [Penutup](#penutup)
+- [PitStop](#pitstop)
+    - [Navigasi](#navigasi)
+    - [Tautan Project](#tautan-project)
+    - [Tentang Project](#tentang-project)
+    - [Preview Singkat](#preview-singkat)
+    - [Fitur](#fitur)
+        - [Untuk Pelanggan](#untuk-pelanggan)
+        - [Untuk Admin](#untuk-admin)
+        - [Sistem](#sistem)
+    - [Status Project](#status-project)
+    - [Batasan](#batasan)
+    - [Tech Stack](#tech-stack)
+    - [Persyaratan](#persyaratan)
+    - [Instalasi](#instalasi)
+        - [1. Clone Project](#1-clone-project)
+        - [2. Install Dependency](#2-install-dependency)
+        - [3. Siapkan Environment](#3-siapkan-environment)
+        - [4. Atur Database](#4-atur-database)
+        - [5. Jalankan Migration dan Seeder](#5-jalankan-migration-dan-seeder)
+        - [6. Jalankan Aplikasi](#6-jalankan-aplikasi)
+    - [Akun Default / Demo](#akun-default--demo)
+    - [Struktur Database](#struktur-database)
+    - [Halaman Utama](#halaman-utama)
+    - [Penutup](#penutup)
+
+## Tautan Project
+
+- Halaman web: [PitStop](https://pitstop.nurkholish.my.id/)
+- Video demo: [Demo](https://youtu.be/kYAnRvrcBcs)
+- Laporan: [Laporan Akhir PWEB.pdf](https://github.com/mnurkholish/pitstop/blob/main/Laporan%20Akhir%20PWEB.pdf)
 
 ## Tentang Project
 
@@ -32,11 +49,11 @@ Admin memiliki halaman khusus untuk mengatur layanan bengkel, melihat booking ak
 
 ## Preview Singkat
 
-| Area | Yang Bisa Dilakukan |
-| --- | --- |
+| Area      | Yang Bisa Dilakukan                                                   |
+| --------- | --------------------------------------------------------------------- |
 | Pelanggan | Booking service, cek status, lihat detail, batalkan booking menunggu. |
-| Admin | Kelola layanan, proses booking, lihat riwayat, pantau ringkasan data. |
-| Sistem | Cek jadwal, hitung estimasi, pisahkan akses admin dan pelanggan. |
+| Admin     | Kelola layanan, proses booking, lihat riwayat, pantau ringkasan data. |
+| Sistem    | Cek jadwal, hitung estimasi, pisahkan akses admin dan pelanggan.      |
 
 Alur sederhana:
 
@@ -83,14 +100,14 @@ Pelanggan pilih layanan
 
 ## Status Project
 
-| Bagian | Status |
-| --- | --- |
-| Autentikasi | Tersedia |
-| Booking pelanggan | Tersedia |
-| Manajemen layanan | Tersedia |
-| Riwayat booking | Tersedia |
-| Preferensi tampilan | Tersedia |
-| Pembayaran online | Belum tersedia |
+| Bagian              | Status         |
+| ------------------- | -------------- |
+| Autentikasi         | Tersedia       |
+| Booking pelanggan   | Tersedia       |
+| Manajemen layanan   | Tersedia       |
+| Riwayat booking     | Tersedia       |
+| Preferensi tampilan | Tersedia       |
+| Pembayaran online   | Belum tersedia |
 | Notifikasi otomatis | Belum tersedia |
 
 ## Batasan
@@ -107,25 +124,25 @@ Beberapa fitur berikut belum tersedia di versi ini:
 
 ## Tech Stack
 
-| Bagian | Teknologi |
-| --- | --- |
-| Backend | PHP 8.3+, Laravel 13 |
-| Autentikasi | Laravel Breeze |
-| Frontend | Blade, Tailwind CSS, Alpine.js |
-| Build Tool | Vite |
-| Database | MySQL / MariaDB |
+| Bagian      | Teknologi                      |
+| ----------- | ------------------------------ |
+| Backend     | PHP 8.3+, Laravel 13           |
+| Autentikasi | Laravel Breeze                 |
+| Frontend    | Blade, Tailwind CSS, Alpine.js |
+| Build Tool  | Vite                           |
+| Database    | MySQL / MariaDB                |
 
 ## Persyaratan
 
 Pastikan perangkat sudah memiliki:
 
-| Kebutuhan | Keterangan |
-| --- | --- |
-| PHP | Versi 8.3 atau lebih baru |
-| Composer | Untuk dependency Laravel |
-| Node.js dan npm | Untuk asset frontend |
-| MySQL / MariaDB | Untuk database |
-| Git | Untuk clone repository |
+| Kebutuhan       | Keterangan                |
+| --------------- | ------------------------- |
+| PHP             | Versi 8.3 atau lebih baru |
+| Composer        | Untuk dependency Laravel  |
+| Node.js dan npm | Untuk asset frontend      |
+| MySQL / MariaDB | Untuk database            |
+| Git             | Untuk clone repository    |
 
 ## Instalasi
 
@@ -205,10 +222,10 @@ npm run build
 
 Gunakan akun berikut setelah menjalankan seeder.
 
-| Role | Email | Password |
-| --- | --- | --- |
-| Admin | `admin@example.com` | `password` |
-| Pelanggan | `user@example.com` | `password` |
+| Role      | Email               | Password   |
+| --------- | ------------------- | ---------- |
+| Admin     | `admin@example.com` | `password` |
+| Pelanggan | `user@example.com`  | `password` |
 
 Seeder juga menambahkan data contoh seperti layanan bengkel dan booking dummy agar aplikasi langsung memiliki isi saat dibuka.
 
@@ -216,12 +233,12 @@ Seeder juga menambahkan data contoh seperti layanan bengkel dan booking dummy ag
 
 Tabel utama yang digunakan:
 
-| Tabel | Fungsi |
-| --- | --- |
-| `users` | Menyimpan akun admin dan pelanggan. |
-| `services` | Menyimpan layanan bengkel, harga, durasi, gambar, dan status aktif. |
-| `bookings` | Menyimpan data booking, kendaraan, jadwal, slot, total biaya, status, dan catatan. |
-| `booking_service` | Menghubungkan booking dengan layanan yang dipilih. |
+| Tabel             | Fungsi                                                                             |
+| ----------------- | ---------------------------------------------------------------------------------- |
+| `users`           | Menyimpan akun admin dan pelanggan.                                                |
+| `services`        | Menyimpan layanan bengkel, harga, durasi, gambar, dan status aktif.                |
+| `bookings`        | Menyimpan data booking, kendaraan, jadwal, slot, total biaya, status, dan catatan. |
+| `booking_service` | Menghubungkan booking dengan layanan yang dipilih.                                 |
 
 Relasi sederhananya:
 
@@ -245,19 +262,19 @@ Penjelasan singkat:
 
 ## Halaman Utama
 
-| Halaman | Keterangan |
-| --- | --- |
-| `/` | Beranda publik. |
-| `/services` | Daftar layanan publik. |
-| `/login` | Login pengguna. |
-| `/register` | Registrasi pelanggan. |
-| `/dashboard` | Dashboard pelanggan dan form booking. |
-| `/my-bookings` | Daftar booking pelanggan. |
-| `/preferences` | Pengaturan tema dan ukuran font. |
-| `/profile` | Pengaturan profil akun. |
-| `/admin/dashboard` | Dashboard admin. |
-| `/admin/services` | Kelola layanan bengkel. |
-| `/admin/bookings` | Kelola booking aktif. |
+| Halaman                   | Keterangan                               |
+| ------------------------- | ---------------------------------------- |
+| `/`                       | Beranda publik.                          |
+| `/services`               | Daftar layanan publik.                   |
+| `/login`                  | Login pengguna.                          |
+| `/register`               | Registrasi pelanggan.                    |
+| `/dashboard`              | Dashboard pelanggan dan form booking.    |
+| `/my-bookings`            | Daftar booking pelanggan.                |
+| `/preferences`            | Pengaturan tema dan ukuran font.         |
+| `/profile`                | Pengaturan profil akun.                  |
+| `/admin/dashboard`        | Dashboard admin.                         |
+| `/admin/services`         | Kelola layanan bengkel.                  |
+| `/admin/bookings`         | Kelola booking aktif.                    |
 | `/admin/bookings/history` | Riwayat booking selesai atau dibatalkan. |
 
 ## Penutup

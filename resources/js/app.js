@@ -47,6 +47,18 @@ const currentTheme = () => (
     document.documentElement.classList.contains('pitstop-theme-dark') ? 'dark' : 'light'
 );
 
+const animateSwitch = (button) => {
+    button.classList.remove('is-switching');
+    void button.offsetWidth;
+    button.classList.add('is-switching');
+    window.setTimeout(() => button.classList.remove('is-switching'), 520);
+};
+
+const toggleTheme = (button) => {
+    applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+    animateSwitch(button);
+};
+
 document.addEventListener('click', (event) => {
     const button = event.target.closest('[data-theme-switch]');
 
@@ -54,5 +66,5 @@ document.addEventListener('click', (event) => {
         return;
     }
 
-    applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+    toggleTheme(button);
 });

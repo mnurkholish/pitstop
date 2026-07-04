@@ -3,11 +3,7 @@
 @section('body_class', 'font-sans text-slate-700 antialiased')
 
 @section('page')
-    <div class="relative flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 py-8">
-        <div class="absolute right-4 top-4 sm:right-6 sm:top-6">
-            <x-ui.theme-switch />
-        </div>
-
+    <div class="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 py-8">
         <div>
             <a href="/">
                 <x-ui.logo class="text-lg" />

@@ -21,11 +21,15 @@
             </div>
 
             <div class="hidden items-center gap-2 md:flex">
+                <x-ui.theme-switch />
                 <x-ui.button href="{{ route('login') }}" variant="secondary" size="sm">Masuk</x-ui.button>
                 <x-ui.button href="{{ route('register') }}" size="sm">Daftar</x-ui.button>
             </div>
 
-            <x-navbar.hamburger />
+            <div class="flex items-center gap-2 md:hidden">
+                <x-ui.theme-switch />
+                <x-navbar.hamburger />
+            </div>
         </div>
 
         <div x-show="open" x-cloak class="space-y-1 border-t border-slate-100 py-3 md:hidden">

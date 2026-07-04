@@ -164,6 +164,11 @@
     color: rgb(219 234 254);
 }
 
+.pitstop-theme-light [data-theme-icon="sun"],
+.pitstop-theme-dark [data-theme-icon="moon"] {
+    display: none;
+}
+
 html.pitstop-font-normal {
     font-size: 16px;
 }

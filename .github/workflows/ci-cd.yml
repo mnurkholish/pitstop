@@ -26,7 +26,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: bcmath, ctype, curl, dom, fileinfo, mbstring, openssl, pdo_sqlite, sqlite3, tokenizer, xml
           coverage: none
 
@@ -45,6 +45,9 @@ jobs:
 
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Check PHP platform requirements
+        run: composer check-platform-reqs
 
       - name: Install Node dependencies
         run: npm ci

@@ -10,6 +10,21 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <script>
+            (() => {
+                const theme = document.cookie
+                    .split('; ')
+                    .find((cookie) => cookie.startsWith('pitstop_theme='))
+                    ?.split('=')[1];
+
+                if (theme !== 'light' && theme !== 'dark') {
+                    return;
+                }
+
+                document.documentElement.classList.remove('pitstop-theme-light', 'pitstop-theme-dark');
+                document.documentElement.classList.add(`pitstop-theme-${theme}`);
+            })();
+        </script>
         <title>{{ $pageTitle }}</title>
         <x-ui.theme-favicon />
         <link rel="preconnect" href="https://fonts.bunny.net">

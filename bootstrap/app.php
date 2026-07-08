@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use App\Http\Middleware\EncryptPreferenceCookies;
 use App\Http\Middleware\RoleMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -13,9 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->encryptCookies(except: [
-            'pitstop_theme',
-            'pitstop_font_size',
+        $middleware->web(replace: [
+            EncryptCookies::class => EncryptPreferenceCookies::class,
         ]);
 
         $middleware->alias([
